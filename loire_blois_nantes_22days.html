@@ -1,0 +1,1105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Loire à Vélo — Blois to Nantes · 22 Days · Family 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700&family=Abril+Fatface&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+  :root {
+    --green-dark: #2d5a27;
+    --green-mid: #4a8c3f;
+    --green-light: #7aba6e;
+    --green-pale: #d6edd2;
+    --cream: #f9f5ee;
+    --parchment: #f0e9d8;
+    --gold: #c8961e;
+    --gold-light: #e8c86e;
+    --brown: #5c3d1e;
+    --text-dark: #1a1a1a;
+    --text-mid: #444;
+    --text-light: #777;
+    --blue-river: #3a7ca5;
+    --red-accent: #b5341c;
+    --phase1: #2d5a27;
+    --phase2: #3a7ca5;
+    --phase3: #8a6a1e;
+    --phase4: #b5341c;
+    --phase5: #7b3f8a;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Lato', sans-serif; background: var(--cream); color: var(--text-dark); line-height: 1.6; }
+
+  /* COVER */
+  .cover {
+    background: var(--green-dark);
+    color: white;
+    padding: 70px 60px 55px;
+    position: relative;
+    overflow: hidden;
+    min-height: 310px;
+  }
+  .cover::before {
+    content:'';
+    position:absolute;
+    inset:0;
+    background:
+      radial-gradient(ellipse at 80% 20%, rgba(200,150,30,.18) 0%, transparent 60%),
+      radial-gradient(ellipse at 10% 80%, rgba(122,186,110,.15) 0%, transparent 50%);
+  }
+  .cover-river {
+    position:absolute; bottom:0; left:0; right:0; height:70px;
+    background:linear-gradient(to right, rgba(58,124,165,.3) 0%, rgba(58,124,165,.5) 30%, rgba(58,124,165,.4) 60%, rgba(58,124,165,.2) 100%);
+    clip-path:polygon(0 40%,8% 25%,18% 38%,30% 20%,42% 35%,55% 18%,68% 30%,80% 15%,92% 28%,100% 15%,100% 100%,0 100%);
+  }
+  .cover-badge {
+    display:inline-block;
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 20px;
+    padding: 4px 14px;
+    font-size: 0.75em;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gold-light);
+    margin-bottom: 16px;
+  }
+  .cover h1 { font-family:'Abril Fatface',serif; font-size:3em; line-height:1.05; margin-bottom:6px; position:relative; }
+  .cover h1 span { color:var(--gold-light); }
+  .cover-sub { font-family:'Playfair Display',serif; font-style:italic; font-size:1.15em; color:rgba(255,255,255,.75); margin-bottom:24px; }
+  .cover-meta { display:flex; gap:24px; flex-wrap:wrap; position:relative; }
+  .cover-meta-item { display:flex; align-items:center; gap:8px; font-size:.88em; color:rgba(255,255,255,.85); }
+  .cover-meta-item .icon { width:28px;height:28px;background:rgba(255,255,255,.12);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.95em; }
+
+  /* VS BANNER */
+  .vs-banner {
+    background: linear-gradient(135deg, #1a3d15 0%, #2d5a27 100%);
+    color: white;
+    padding: 18px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 32px;
+    flex-wrap: wrap;
+    font-size: 0.85em;
+  }
+  .vs-item { text-align: center; }
+  .vs-item .vs-label { font-size: 0.7em; text-transform: uppercase; letter-spacing: 1.5px; color: rgba(255,255,255,0.6); margin-bottom: 2px; }
+  .vs-item .vs-val { font-weight: 700; font-size: 1.1em; color: var(--gold-light); }
+  .vs-divider { width: 1px; height: 40px; background: rgba(255,255,255,0.2); }
+
+  /* CONTAINER */
+  .container { max-width:900px; margin:0 auto; padding:0 32px 60px; }
+
+  /* SECTION HEADERS */
+  .section-header { margin:48px 0 22px; padding-bottom:10px; border-bottom:2px solid var(--green-pale); display:flex; align-items:baseline; gap:14px; }
+  .section-header h2 { font-family:'Playfair Display',serif; font-size:1.65em; color:var(--green-dark); }
+  .section-header .section-sub { font-size:.85em; color:var(--text-light); font-style:italic; }
+
+  /* MAP */
+  #map { height:500px; border-radius:14px; overflow:hidden; box-shadow:0 4px 20px rgba(0,0,0,.12); margin-bottom:10px; }
+  .map-legend { display:flex; flex-wrap:wrap; gap:10px; margin-bottom:28px; font-size:.78em; }
+  .map-legend span { display:flex; align-items:center; gap:5px; color: var(--text-mid); }
+  .map-legend .dot { display:inline-block; width:11px; height:11px; border-radius:50%; }
+
+  /* OVERVIEW GRID */
+  .overview-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-bottom:22px; }
+  .overview-card { background:white; border-radius:12px; padding:18px; border-top:3px solid var(--green-mid); box-shadow:0 2px 8px rgba(0,0,0,.06); }
+  .overview-card .oc-label { font-size:.72em; letter-spacing:2px; text-transform:uppercase; color:var(--text-light); margin-bottom:5px; }
+  .overview-card .oc-value { font-family:'Playfair Display',serif; font-size:1.45em; color:var(--green-dark); font-weight:700; }
+  .overview-card .oc-note { font-size:.78em; color:var(--text-light); margin-top:3px; }
+
+  /* SCHEDULE GRID */
+  .schedule-grid {
+    display: grid;
+    grid-template-columns: 60px 1fr;
+    gap: 0;
+    position: relative;
+    margin-bottom: 40px;
+  }
+  .schedule-grid::before {
+    content:'';
+    position:absolute;
+    left: 29px;
+    top: 20px;
+    bottom: 20px;
+    width: 2px;
+    background: linear-gradient(to bottom, #2d5a27, #3a7ca5, #8a6a1e, #b5341c, #7b3f8a);
+    z-index: 0;
+  }
+  .sg-dot-col { display:flex; flex-direction:column; align-items:center; padding-top:18px; position:relative; z-index:1; }
+  .sg-dot {
+    width:22px; height:22px; border-radius:50%;
+    border:3px solid white;
+    box-shadow:0 0 0 2px rgba(0,0,0,0.15), 0 2px 6px rgba(0,0,0,0.2);
+    flex-shrink:0;
+    display:flex; align-items:center; justify-content:center;
+    font-size:10px;
+    margin-bottom: 4px;
+  }
+  .sg-content { padding: 10px 0 10px 14px; }
+  .sg-row { display:contents; }
+  .sg-row:hover .sg-content-inner { background:#f5faf4; }
+
+  .sg-content-inner {
+    background:white;
+    border-radius:10px;
+    padding:14px 16px;
+    margin-bottom:8px;
+    box-shadow:0 1px 6px rgba(0,0,0,.07);
+    border-left:3px solid transparent;
+    transition: background 0.15s;
+    cursor: default;
+  }
+  .sg-content-inner.rest { background:#fffdf0; border-left-color:#c8961e; }
+
+  .sg-top { display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:6px; margin-bottom:6px; }
+  .sg-daynum { font-size:.7em; text-transform:uppercase; letter-spacing:1.5px; color:var(--text-light); }
+  .sg-title { font-family:'Playfair Display',serif; font-size:1.05em; font-weight:700; color:var(--text-dark); }
+  .sg-km { font-size:.78em; padding:2px 9px; border-radius:20px; font-weight:700; white-space:nowrap; }
+  .sg-km.ride { background:var(--green-pale); color:var(--green-dark); }
+  .sg-km.rest { background:#fff3cd; color:#6d4c00; }
+
+  .sg-desc { font-size:.83em; color:var(--text-mid); line-height:1.55; margin-bottom:10px; }
+
+  .sg-detail-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; }
+  .sg-detail { background:var(--cream); border-radius:7px; padding:8px 10px; font-size:.78em; }
+  .sg-detail-label { font-size:.67em; text-transform:uppercase; letter-spacing:1.5px; color:var(--text-light); font-weight:700; margin-bottom:3px; }
+  .sg-detail-content { color:var(--text-mid); line-height:1.45; }
+  .sg-detail-content a { color:var(--blue-river); text-decoration:none; }
+
+  .tags { display:flex; flex-wrap:wrap; gap:4px; margin-top:8px; }
+  .tag { font-size:.69em; padding:2px 7px; border-radius:20px; font-weight:700; }
+  .tag-camp { background:#d4edda; color:#1e5c2a; }
+  .tag-hotel { background:#cce5ff; color:#00407a; }
+  .tag-airbnb { background:#fde2e4; color:#8b1a1a; }
+  .tag-chateau { background:#ede0f5; color:#5a1f77; }
+  .tag-swim { background:#d1ecf1; color:#0c5460; }
+  .tag-rest { background:#fff3cd; color:#6d4c00; }
+  .tag-kids { background:#fce4ec; color:#880e4f; }
+  .tag-food { background:#e8f5e9; color:#1b5e20; }
+  .tag-urgent { background:#f8d7da; color:#721c24; border:1px solid #f5c6cb; }
+
+  /* PHASE HEADER */
+  .phase-header {
+    border-radius:10px;
+    padding:14px 20px;
+    margin:28px 0 12px;
+    color:white;
+    display:flex;
+    align-items:center;
+    gap:16px;
+  }
+  .phase-header .ph-num { font-family:'Abril Fatface',serif; font-size:2.2em; opacity:.35; flex-shrink:0; line-height:1; }
+  .phase-header h3 { font-family:'Playfair Display',serif; font-size:1.15em; margin-bottom:3px; }
+  .phase-header p { font-size:.82em; opacity:.88; line-height:1.4; }
+  .phase-stats { display:flex; gap:10px; flex-wrap:wrap; margin-top:6px; }
+  .phase-stat { background:rgba(255,255,255,.15); border-radius:5px; padding:2px 8px; font-size:.75em; }
+
+  /* TIP & ALERT BOXES */
+  .tip-box { background:var(--parchment); border-left:4px solid var(--gold); border-radius:0 10px 10px 0; padding:16px 20px; margin:18px 0; font-size:.87em; line-height:1.7; }
+  .tip-box strong { color:var(--brown); }
+  .tip-box ul { padding-left:18px; margin-top:6px; }
+  .tip-box li { margin-bottom:4px; }
+  .alert-box { background:#fff5e6; border:1.5px solid var(--gold); border-radius:10px; padding:14px 18px; margin:16px 0; font-size:.85em; line-height:1.6; }
+  .alert-box strong { color:var(--red-accent); }
+  .alert-box ul { padding-left:18px; margin-top:6px; }
+  .alert-box li { margin-bottom:4px; }
+
+  /* BUDGET */
+  .budget-table { width:100%; border-collapse:collapse; font-size:.86em; margin-top:12px; }
+  .budget-table th { background:var(--green-dark); color:white; padding:10px 14px; text-align:left; font-weight:600; font-size:.82em; letter-spacing:.5px; }
+  .budget-table td { padding:9px 14px; border-bottom:1px solid #eee; color:var(--text-mid); }
+  .budget-table tr:nth-child(even) td { background:var(--cream); }
+  .budget-table .total td { font-weight:700; color:var(--text-dark); border-top:2px solid var(--green-mid); background:var(--green-pale) !important; }
+  .budget-table .amount { text-align:right; font-weight:700; color:var(--green-dark); }
+
+  /* CONTACTS */
+  .contacts-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:14px; }
+  .contact-card { background:white; border-radius:10px; padding:14px 16px; border-left:3px solid var(--green-mid); box-shadow:0 2px 6px rgba(0,0,0,.05); font-size:.83em; }
+  .contact-card h4 { font-family:'Playfair Display',serif; font-size:1.03em; margin-bottom:5px; }
+  .contact-card p { color:var(--text-mid); line-height:1.6; }
+  .contact-card a { color:var(--blue-river); }
+
+  /* CHECKLIST */
+  .checklist { display:grid; grid-template-columns:1fr 1fr; gap:7px; margin-top:12px; }
+  .check-item { display:flex; align-items:flex-start; gap:8px; font-size:.83em; color:var(--text-mid); }
+  .check-box { width:15px;height:15px;border:2px solid var(--green-mid);border-radius:3px;flex-shrink:0;margin-top:2px; }
+
+  /* FOOTER */
+  .footer { background:var(--green-dark); color:rgba(255,255,255,.6); text-align:center; padding:26px; font-size:.78em; margin-top:50px; }
+  .footer strong { color:var(--gold-light); }
+
+  @media print {
+    .sg-content-inner { break-inside:avoid; }
+    .phase-header { break-inside:avoid; }
+    #map { height:380px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- COVER -->
+<div class="cover">
+  <div class="cover-badge">Compact Edition · 22 Days</div>
+  <h1>Loire <span>à Vélo</span></h1>
+  <div class="cover-sub">Blois to Nantes — the best of the Loire, nothing wasted</div>
+  <div class="cover-meta">
+    <div class="cover-meta-item"><div class="icon">👨‍👩‍👧‍👦</div>Family of 5 · ages 4, 8, 11, 41, 43</div>
+    <div class="cover-meta-item"><div class="icon">📅</div>22 days · August 2026</div>
+    <div class="cover-meta-item"><div class="icon">🚲</div>~460 km · 20–28 km/day</div>
+    <div class="cover-meta-item"><div class="icon">🏕️</div>Mostly camping · 4 hotel/AirBnb nights</div>
+    <div class="cover-meta-item"><div class="icon">✈️</div>Fly Tel Aviv → Paris · train to Blois</div>
+  </div>
+  <div class="cover-river"></div>
+</div>
+
+<!-- VS BANNER -->
+<div class="vs-banner">
+  <div class="vs-item"><div class="vs-label">This version</div><div class="vs-val">22 days · Blois → Nantes</div></div>
+  <div class="vs-divider"></div>
+  <div class="vs-item"><div class="vs-label">Full version</div><div class="vs-val">35 days · Orléans → Nantes</div></div>
+  <div class="vs-divider"></div>
+  <div class="vs-item"><div class="vs-label">Distance saved</div><div class="vs-val">~90 km (Orléans → Blois skipped)</div></div>
+  <div class="vs-divider"></div>
+  <div class="vs-item"><div class="vs-label">Rest days</div><div class="vs-val">4 (vs 10 in full version)</div></div>
+  <div class="vs-divider"></div>
+  <div class="vs-item"><div class="vs-label">What you keep</div><div class="vs-val">All the great châteaux ✅</div></div>
+</div>
+
+<div class="container">
+
+  <!-- MAP -->
+  <div class="section-header" style="margin-top:36px;">
+    <h2>Interactive Route Map</h2>
+    <span class="section-sub">Click any stop for details · colour-coded by phase</span>
+  </div>
+
+  <div id="map"></div>
+
+  <div class="map-legend">
+    <span><span class="dot" style="background:#2d5a27"></span> Phase 1: Blois → Tours</span>
+    <span><span class="dot" style="background:#8a6a1e"></span> Phase 2: Tours → Saumur</span>
+    <span><span class="dot" style="background:#b5341c"></span> Phase 3: Saumur → Angers</span>
+    <span><span class="dot" style="background:#7b3f8a"></span> Phase 4: Angers → Nantes</span>
+    <span><span class="dot" style="background:#b5341c;outline:2px solid #b5341c;outline-offset:2px;border-radius:50%"></span> ⚡ Book immediately</span>
+  </div>
+
+  <!-- OVERVIEW -->
+  <div class="section-header">
+    <h2>Trip Overview</h2>
+    <span class="section-sub">22 days · the highlights, the right pace</span>
+  </div>
+
+  <div class="overview-grid">
+    <div class="overview-card">
+      <div class="oc-label">Total Distance</div>
+      <div class="oc-value">~460 km</div>
+      <div class="oc-note">Blois → Nantes along La Loire à Vélo</div>
+    </div>
+    <div class="overview-card">
+      <div class="oc-label">Daily Pace</div>
+      <div class="oc-value">20–28 km</div>
+      <div class="oc-note">Same relaxed pace — just fewer rest days</div>
+    </div>
+    <div class="overview-card">
+      <div class="oc-label">Riding Days</div>
+      <div class="oc-value">18 days</div>
+      <div class="oc-note">+ 4 rest days at key cities</div>
+    </div>
+    <div class="overview-card">
+      <div class="oc-label">Riding Hours</div>
+      <div class="oc-value">7am – 11am</div>
+      <div class="oc-note">Avoid August midday heat · rest noon–3pm</div>
+    </div>
+    <div class="overview-card">
+      <div class="oc-label">Camping Nights</div>
+      <div class="oc-value">~17 nights</div>
+      <div class="oc-note">+ ~4 hotel/AirBnb nights at cities</div>
+    </div>
+    <div class="overview-card">
+      <div class="oc-label">Start / Finish</div>
+      <div class="oc-value">Blois → Nantes</div>
+      <div class="oc-note">Train Paris → Blois · fly Nantes → home</div>
+    </div>
+  </div>
+
+  <div class="tip-box">
+    <strong>⚖️ Why this version works better for 22 days</strong><br>
+    The Orléans → Blois stretch (cut from the full version) is the flattest and least remarkable part of the route — pleasant but not spectacular. Starting in Blois puts you immediately into the château heartland. You lose nothing of significance and gain a more focused, intense experience. The 4 rest days are placed at Tours (1 night), Saumur (1 night) and Nantes (2 nights) — the cities most worth lingering in.
+  </div>
+
+  <div class="alert-box">
+    <strong>⚡ Book these immediately — August fills months ahead:</strong>
+    <ul>
+      <li><strong>Camping de l'Île d'Offard, Saumur</strong> → <a href="https://www.saumur-camping.com" style="color:var(--blue-river)">saumur-camping.com</a></li>
+      <li><strong>Camping de l'Île d'Or, Amboise</strong> → <a href="https://www.campingamboise.com" style="color:var(--blue-river)">campingamboise.com</a></li>
+      <li><strong>Camping du Port Caroline, Angers</strong> → <a href="https://www.campingportcaroline.fr" style="color:var(--blue-river)">campingportcaroline.fr</a></li>
+      <li><strong>Les Machines de l'Île tickets, Nantes</strong> → <a href="https://www.lesmachines-nantes.fr/en/" style="color:var(--blue-river)">lesmachines-nantes.fr</a></li>
+      <li><strong>Détours de Loire bikes</strong> (Blois pick-up, Nantes drop-off) → +33 2 47 61 22 23 · <a href="https://www.detoursdeloire.com/en/" style="color:var(--blue-river)">detoursdeloire.com</a></li>
+    </ul>
+  </div>
+
+  <!-- ══════════════════ ITINERARY ══════════════════ -->
+  <div class="section-header">
+    <h2>Day-by-Day Itinerary</h2>
+    <span class="section-sub">22 days · Blois to Nantes</span>
+  </div>
+
+  <!-- ─── PHASE 1: BLOIS → TOURS ─── -->
+  <div class="phase-header" style="background:var(--phase1);">
+    <div class="ph-num">1</div>
+    <div>
+      <h3>Blois → Tours</h3>
+      <p>Days 1–7 · ~65 km · Straight into château country. The Garden Festival, Leonardo da Vinci's home, and a 2-night city rest in Tours. The most enchanting stretch of the Loire.</p>
+      <div class="phase-stats">
+        <div class="phase-stat">🚲 5 riding days</div>
+        <div class="phase-stat">😴 1 rest day (Tours)</div>
+        <div class="phase-stat">📍 4 overnight stops</div>
+        <div class="phase-stat">~22 km avg</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DAY 1 -->
+  <div class="sg-content-inner">
+    <div class="sg-top">
+      <div><div class="sg-daynum">Day 1 — Arrival</div><div class="sg-title">🚲 Blois — Pick up bikes & explore</div></div>
+      <div class="sg-km rest">0 km</div>
+    </div>
+    <div class="sg-desc">Arrive by train from Paris Austerlitz or Tours (~1.5 hrs from Paris). Pick up bikes at Détours de Loire Blois. Spend the afternoon on wheels around the city — the Royal Château is right in the centre. Evening: son-et-lumière light show on the château façade (runs July–August, brilliant for kids, ~€10). Set up camp and get an early night.</div>
+    <div class="sg-detail-grid">
+      <div class="sg-detail">
+        <div class="sg-detail-label">🏕️ Stay</div>
+        <div class="sg-detail-content"><strong>Camping du Lac de Loire</strong> (~3 km from centre)<br>Or treat to 1 hotel night in Blois to start fresh.<br><a href="https://www.booking.com">booking.com</a></div>
+      </div>
+      <div class="sg-detail">
+        <div class="sg-detail-label">🏰 Highlights</div>
+        <div class="sg-detail-content">Royal Château de Blois · Maison de la Magie (magic museum — kids' favourite) · Son-et-lumière evening show</div>
+      </div>
+      <div class="sg-detail">
+        <div class="sg-detail-label">🚲 Bike Pickup</div>
+        <div class="sg-detail-content"><strong>Détours de Loire Blois</strong><br>Ask them to check all bikes carefully. Confirm child seat/trailer fits and is comfortable. Get road book.<br>detoursdeloire.com</div>
+      </div>
+    </div>
+    <div class="tags"><span class="tag tag-hotel">🏨 Hotel option</span><span class="tag tag-chateau">🏰 Royal Château</span><span class="tag tag-kids">✨ Magic museum</span></div>
+  </div>
+
+  <!-- DAY 2 -->
+  <div class="sg-content-inner">
+    <div class="sg-top">
+      <div><div class="sg-daynum">Day 2</div><div class="sg-title">🌸 Blois → Chaumont-sur-Loire</div></div>
+      <div class="sg-km ride">~20 km</div>
+    </div>
+    <div class="sg-desc">Short first riding day — everyone finds their rhythm. The path hugs the Loire through poplar groves. Chaumont's château hosts the International Garden Festival all summer: 30+ contemporary themed gardens installed on the grounds. Arrive by 10am and spend the whole day exploring. One of the most memorable stops for children on the entire route.</div>
+    <div class="sg-detail-grid">
+      <div class="sg-detail">
+        <div class="sg-detail-label">🏕️ Stay</div>
+        <div class="sg-detail-content"><strong>Camping de la Grande Tortue</strong>, Candé-sur-Beuvron (~3 km from château). Pool, excellent family site.<br>+33 2 54 44 15 20<br><a href="https://www.la-grande-tortue.com">la-grande-tortue.com</a></div>
+      </div>
+      <div class="sg-detail">
+        <div class="sg-detail-label">🌸 Garden Festival</div>
+        <div class="sg-detail-content">Runs Apr–Nov. ~30 themed contemporary gardens. Adult ~€20 / child 6–15 ~€10 / under 6 free.<br><a href="https://www.domaine-chaumont.fr/en">domaine-chaumont.fr</a></div>
+      </div>
+      <div class="sg-detail">
+        <div class="sg-detail-label">📝 Tip</div>
+        <div class="sg-detail-content">Leave Blois at 7:30am, arrive by 10am, full day for the gardens before the heat peaks. The château interior is also worth 45 minutes.</div>
+      </div>
+    </div>
+    <div class="tags"><span class="tag tag-camp">🏕️ Camp</span><span class="tag tag-chateau">🌸 Garden Festival</span><span class="tag tag-kids">👧 Magical for all ages</span></div>
+  </div>
+
+  <!-- DAY 3 -->
+  <div class="sg-content-inner">
+    <div class="sg-top">
+      <div><div class="sg-daynum">Day 3</div><div class="sg-title">🎨 Chaumont → Amboise</div></div>
+      <div class="sg-km ride">~23 km</div>
+    </div>
+    <div class="sg-desc">One of the most beautiful stages on the route — willow-lined levées with constant river views. Amboise is the undisputed highlight of Phase 1. The Clos Lucé is Leonardo da Vinci's final home, with life-size models of his inventions (flying machine, tank, helicopter, swing bridge) scattered through the gardens. The 8 and 11-year-old will spend hours here. The Royal Château above town is also impressive.</div>
+    <div class="sg-detail-grid">
+      <div class="sg-detail">
+        <div class="sg-detail-label">🏕️ Stay — BOOK NOW ⚡</div>
+        <div class="sg-detail-content"><strong>Camping de l'Île d'Or</strong> — on an island in the Loire, walking distance from everything. Most popular campsite on the route.<br>+33 2 47 57 23 37<br><a href="https://www.campingamboise.com">campingamboise.com</a></div>
+      </div>
+      <div class="sg-detail">
+        <div class="sg-detail-label">🎨 Clos Lucé (da Vinci)</div>
+        <div class="sg-detail-content">Leonardo's final home. Life-size inventions in gardens. Adult ~€18 / child 6–18 ~€12 / under 6 free. Allow 2–3 hrs.<br><a href="https://www.vinci-closluce.com/en">vinci-closluce.com</a></div>
+      </div>
+      <div class="sg-detail">
+        <div class="sg-detail-label">🏰 Château Royal d'Amboise</div>
+        <div class="sg-detail-content">Leonardo is buried here. Terrace views over the Loire are stunning. Adult ~€15 / child ~€10.<br><a href="https://www.chateau-amboise.com/en/">chateau-amboise.com</a></div>
+      </div>
+    </div>
+    <div class="tags"><span class="tag tag-camp">🏕️ Camp</span><span class="tag tag-chateau">🎨 da Vinci inventions</span><span class="tag tag-kids">🚁 Flying machines!</span><span class="tag tag-urgent">⚡ Book NOW</span></div>
+  </div>
+
+  <!-- DAY 4 -->
+  <div class="sg-content-inner">
+    <div class="sg-top">
+      <div><div class="sg-daynum">Day 4</div><div class="sg-title">🏊 Amboise — River rest day</div></div>
+      <div class="sg-km rest">0 km 😴</div>
+    </div>
+    <div class="sg-desc">If you didn't fit Clos Lucé and the Château yesterday, this is your chance. Otherwise: the Loire has a sandy river beach just below the campsite, brilliant for young children all morning. Kayak hire available in town. The Friday/Sunday market is excellent. This is the first real "resort" feeling of the trip — savour it fully.</div>
+    <div class="tags"><span class="tag tag-rest">😴 Rest day</span><span class="tag tag-swim">🏊 River beach</span><span class="tag tag-kids">🛶 Kayaking</span></div>
+  </div>
+
+  <!-- DAY 5 -->
+  <div class="sg-content-inner">
+    <div class="sg-top">
+      <div><div class="sg-daynum">Day 5</div><div class="sg-title">🏛️ Amboise → Tours</div></div>
+      <div class="sg-km ride">~25 km</div>
+    </div>
+    <div class="sg-desc">Follow the south bank through the Montlouis-sur-Loire vineyards — flat, shaded, beautiful. Tours is the biggest city on the route. Get an AirBnb for the night: washing machine, real kitchen, space to spread out after 5 days camping. The medieval old town (Place Plumereau, Rue Colbert) is extraordinary. Best restaurant city on the entire Loire.</div>
+    <div class="sg-detail-grid">
+      <div class="sg-detail">
+        <div class="sg-detail-label">🏠 Stay</div>
+        <div class="sg-detail-content"><strong>AirBnb in Tours old town</strong> — 3+ bedrooms, washing machine. Budget €100–150/night. Book well ahead for August.<br><a href="https://www.airbnb.com">airbnb.com</a></div>
+      </div>
+      <div class="sg-detail">
+        <div class="sg-detail-label">🚲 Bike Service</div>
+        <div class="sg-detail-content"><strong>Détours de Loire Tours</strong> (HQ, next to train station). Bring any issues here — they fix most things same-day.<br>37 Rue Charles Gille</div>
+      </div>
+      <div class="sg-detail">
+        <div class="sg-detail-label">🍽️ Tours Food</div>
+        <div class="sg-detail-content">Rillettes de Tours, Tarte Tatin, Vouvray white wine. Place Plumereau and Rue Colbert have the best restaurants. Don't miss the covered market, Les Halles.</div>
+      </div>
+    </div>
+    <div class="tags"><span class="tag tag-airbnb">🏠 AirBnb night</span><span class="tag tag-food">🍽️ Best food on route</span></div>
+  </div>
+
+  <!-- DAY 6 REST TOURS -->
+  <div class="sg-content-inner rest">
+    <div class="sg-top">
+      <div><div class="sg-daynum">Day 6 — Rest Day</div><div class="sg-title">🐠 Tours — City day</div></div>
+      <div class="sg-km rest">0 km 😴</div>
+    </div>
+    <div class="sg-desc">Tours earns a full day. Morning: Touraine Aquarium (10,000 fish, underwater tunnels — excellent for the young ones). Afternoon: medieval cathedral, wander the old town. Practical: full laundry in the AirBnb, repack panniers, shed any excess weight, check all bikes at the Détours de Loire shop. Optional day trip to Château de Villandry (20 min by taxi) — the finest Renaissance gardens in France.</div>
+    <div class="sg-detail-grid">
+      <div class="sg-detail">
+        <div class="sg-detail-label">🐠 Touraine Aquarium</div>
+        <div class="sg-detail-content">10,000 fish, underground tunnels. Great on a hot afternoon. Adult ~€15 / child ~€10.<br><a href="https://www.aquarium-touraine.fr">aquarium-touraine.fr</a></div>
+      </div>
+      <div class="sg-detail">
+        <div class="sg-detail-label">🌿 Villandry (optional)</div>
+        <div class="sg-detail-content">Finest Renaissance gardens in France. 20 km west of Tours (taxi or local train). Adult ~€13 / child ~€6.<br><a href="https://www.chateauvillandry.fr/en/">chateauvillandry.fr</a></div>
+      </div>
+      <div class="sg-detail">
+        <div class="sg-detail-label">🧺 Practical</div>
+        <div class="sg-detail-content">Full laundry · repack panniers · stock up supplies · check bikes at Détours de Loire Tours · resupply sunscreen</div>
+      </div>
+    </div>
+    <div class="tags"><span class="tag tag-rest">😴 Rest day</span><span class="tag tag-kids">🐠 Aquarium</span><span class="tag tag-food">🧺 Laundry &amp; restock</span></div>
+  </div>
+
+  <!-- DAY 7 -->
+  <div class="sg-content-inner">
+    <div class="sg-top">
+      <div><div class="sg-daynum">Day 7</div><div class="sg-title">🏰 Tours → Azay-le-Rideau</div></div>
+      <div class="sg-km ride">~28 km</div>
+    </div>
+    <div class="sg-desc">Leave Tours and follow the Indre valley — quieter, more intimate, and beautifully shaded compared to the main Loire levée. Pass through Villandry if you skipped the day trip. Azay-le-Rideau: one of the most beautiful buildings in France — a Renaissance château floating on the Indre river, reflected perfectly in the water. The 4-year-old will call it the princess castle.</div>
+    <div class="sg-detail-grid">
+      <div class="sg-detail">
+        <div class="sg-detail-label">🏕️ Stay</div>
+        <div class="sg-detail-content"><strong>Camping Municipal du Sabot</strong>, Azay-le-Rideau — 5 min walk from château. Simple but well-located. ~€12/night.<br>+33 2 47 45 42 72</div>
+      </div>
+      <div class="sg-detail">
+        <div class="sg-detail-label">🏰 Château d'Azay-le-Rideau</div>
+        <div class="sg-detail-content">Built 1518, surrounded by a moat fed by the Indre. UNESCO World Heritage. Adult ~€13 / under 18 EU free. Summer evening light shows in the grounds.<br><a href="https://www.azay-le-rideau.fr/en">azay-le-rideau.fr</a></div>
+      </div>
+      <div class="sg-detail">
+        <div class="sg-detail-label">📝 Route note</div>
+        <div class="sg-detail-content">This is a slightly longer day at 28 km. The Indre valley is shadier than the Loire levée — better for August heat. Leave by 7am, Villandry by 9am, Azay by noon.</div>
+      </div>
+    </div>
+    <div class="tags"><span class="tag tag-camp">🏕️ Camp</span><span class="tag tag-chateau">🏰 Floating château</span><span class="tag tag-kids">👸 Princess castle!</span></div>
+  </div>
+
+  <!-- ─── PHASE 2: TOURS → SAUMUR ─── -->
+  <div class="phase-header" style="background:var(--phase3);">
+    <div class="ph-num">2</div>
+    <div>
+      <h3>Tours → Saumur</h3>
+      <p>Days 8–13 · ~80 km · Château country at its absolute richest. Sleeping Beauty, Richard the Lionheart, troglodyte caves, and an island campsite in the middle of the Loire.</p>
+      <div class="phase-stats">
+        <div class="phase-stat">🚲 5 riding days</div>
+        <div class="phase-stat">😴 1 rest day (Saumur)</div>
+        <div class="phase-stat">📍 4 overnight stops</div>
+        <div class="phase-stat">~23 km avg</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DAY 8 -->
+  <div class="sg-content-inner">
+    <div class="sg-top">
+      <div><div class="sg-daynum">Day 8</div><div class="sg-title">👸 Azay → Château d'Ussé → Chinon</div></div>
+      <div class="sg-km ride">~25 km</div>
+    </div>
+    <div class="sg-desc">Today has two unmissable châteaux. First: Ussé — the Sleeping Beauty castle. Gleaming white towers, turrets, formal gardens, wax tableaux of the fairy tale inside. The 4-year-old will be absolutely speechless. Then Chinon: a magnificent medieval clifftop city with one of France's largest château ruins and a fantastic riverside campsite on an island in the Vienne.</div>
+    <div class="sg-detail-grid">
+      <div class="sg-detail">
+        <div class="sg-detail-label">🏕️ Stay</div>
+        <div class="sg-detail-content"><strong>Camping de l'Île Auger</strong>, Chinon — river island, excellent shaded pitches. ~€15–20/night.<br>+33 2 47 93 08 35<br><a href="https://www.camping-chinon.com">camping-chinon.com</a></div>
+      </div>
+      <div class="sg-detail">
+        <div class="sg-detail-label">👸 Château d'Ussé</div>
+        <div class="sg-detail-content">The Sleeping Beauty castle. Wax fairy-tale scenes, peacocks in the gardens. Adult ~€17 / child 8–16 ~€11 / under 8 free.<br><a href="https://www.chateaudusse.fr/en">chateaudusse.fr</a></div>
+      </div>
+      <div class="sg-detail">
+        <div class="sg-detail-label">⚔️ Forteresse Royale de Chinon</div>
+        <div class="sg-detail-content">Clifftop fortress where Joan of Arc met Charles VII. Kids get a tablet for interactive VR tour. Adult ~€10 / child ~€6.<br><a href="https://www.forteressechinon.fr/en">forteressechinon.fr</a></div>
+      </div>
+    </div>
+    <div class="tags"><span class="tag tag-camp">🏕️ Camp</span><span class="tag tag-chateau">👸 Sleeping Beauty!</span><span class="tag tag-kids">🏰 2 châteaux in 1 day</span></div>
+  </div>
+
+  <!-- DAY 9 -->
+  <div class="sg-content-inner">
+    <div class="sg-top">
+      <div><div class="sg-daynum">Day 9</div><div class="sg-title">🕳️ Chinon — Troglodytes & caves</div></div>
+      <div class="sg-km rest">0 km 😴</div>
+    </div>
+    <div class="sg-desc">Half rest, half explore. Chinon's troglodyte cave dwellings carved into the tufa cliff are utterly unique — some still lived in, many open for visits. The Caves Plouzeau wine cellar is a medieval cave carved into the rock (adults). River swimming below the campsite for the kids in the afternoon. The old town streets are lovely for a slow morning wander with pastries.</div>
+    <div class="tags"><span class="tag tag-rest">😴 Rest / easy day</span><span class="tag tag-kids">🕳️ Cave dwellings</span><span class="tag tag-swim">🏊 River swim</span><span class="tag tag-food">🍷 Chinon wine caves</span></div>
+  </div>
+
+  <!-- DAY 10 -->
+  <div class="sg-content-inner">
+    <div class="sg-top">
+      <div><div class="sg-daynum">Day 10</div><div class="sg-title">⛪ Chinon → Fontevraud → Saumur</div></div>
+      <div class="sg-km ride">~30 km</div>
+    </div>
+    <div class="sg-desc">The longest day of the trip — but packed with history to break it up. Stop at Fontevraud Abbey: one of Europe's largest medieval complexes, containing the tombs of Eleanor of Aquitaine and Richard the Lionheart. Then Saumur: the iconic white château on its promontory, and the best campsite on the entire route — on an island in the Loire.</div>
+    <div class="sg-detail-grid">
+      <div class="sg-detail">
+        <div class="sg-detail-label">🏕️ Stay — BOOK NOW ⚡</div>
+        <div class="sg-detail-content"><strong>Camping de l'Île d'Offard</strong> — on an island in the Loire. THE bucket-list campsite. 3-star, pool. August books out months ahead.<br>+33 2 41 40 30 00<br><a href="https://www.saumur-camping.com">saumur-camping.com</a></div>
+      </div>
+      <div class="sg-detail">
+        <div class="sg-detail-label">⛪ Abbaye de Fontevraud</div>
+        <div class="sg-detail-content">Tombs of Eleanor of Aquitaine &amp; Richard the Lionheart. Best-preserved medieval abbey in France. Adult ~€12 / child ~€7.<br><a href="https://fontevraud.fr/en/">fontevraud.fr</a></div>
+      </div>
+      <div class="sg-detail">
+        <div class="sg-detail-label">🏰 Château de Saumur</div>
+        <div class="sg-detail-content">The iconic Loire château on its cliff. Great decorative arts museum inside. Mushroom caves nearby — fascinating underground world.<br>Adult ~€10 / child ~€6</div>
+      </div>
+    </div>
+    <div class="tags"><span class="tag tag-camp">🏕️ Island camp</span><span class="tag tag-chateau">⚔️ Plantagenet tombs</span><span class="tag tag-urgent">⚡ Book Île d'Offard NOW</span></div>
+  </div>
+
+  <!-- DAY 11 REST SAUMUR -->
+  <div class="sg-content-inner rest">
+    <div class="sg-top">
+      <div><div class="sg-daynum">Day 11 — Rest Day</div><div class="sg-title">🍄 Saumur — Island base</div></div>
+      <div class="sg-km rest">0 km 😴</div>
+    </div>
+    <div class="sg-desc">Saumur is the best rest stop on the whole route. The Île d'Offard campsite feels like a resort — kids swim, you sit by the Loire. Must-do: the mushroom caves (Les Caves Louis de Grenelle) carved into the tufa cliff — completely cool in August heat, utterly unique, kids love the underground world. Sparkling Saumur wine tasting for the adults. Stock up for the next stretch.</div>
+    <div class="sg-detail-grid">
+      <div class="sg-detail">
+        <div class="sg-detail-label">🍄 Mushroom Caves</div>
+        <div class="sg-detail-content"><strong>Les Caves Louis de Grenelle</strong> — 15°C underground, fascinating tour. Adult ~€10 / child ~€6. The most unusual attraction on the route.<br><a href="https://www.louisdegrenelle.fr">louisdegrenelle.fr</a></div>
+      </div>
+      <div class="sg-detail">
+        <div class="sg-detail-label">🏊 Loire Island</div>
+        <div class="sg-detail-content">The campsite is on the island — the kids can swim in the Loire shallows all morning. The view of Saumur château from the island is spectacular.</div>
+      </div>
+      <div class="sg-detail">
+        <div class="sg-detail-label">🥂 Wine Tasting</div>
+        <div class="sg-detail-content">Saumur Mousseux (sparkling) is produced right here. The caves double as wine cellars. Several offer tastings. Ask at the campsite for the best nearby option.</div>
+      </div>
+    </div>
+    <div class="tags"><span class="tag tag-rest">😴 Rest day</span><span class="tag tag-kids">🍄 Mushroom caves</span><span class="tag tag-swim">🏊 Loire island</span><span class="tag tag-food">🥂 Sparkling wine</span></div>
+  </div>
+
+  <!-- ─── PHASE 3: SAUMUR → ANGERS ─── -->
+  <div class="phase-header" style="background:var(--phase4);">
+    <div class="ph-num">3</div>
+    <div>
+      <h3>Saumur → Angers</h3>
+      <p>Days 12–16 · ~50 km · Gentle Anjou countryside. A Roman amphitheatre, France's only Loire island village, and a medieval giant fortress containing the world's largest medieval tapestry.</p>
+      <div class="phase-stats">
+        <div class="phase-stat">🚲 4 riding days</div>
+        <div class="phase-stat">😴 1 rest day (Angers)</div>
+        <div class="phase-stat">📍 3 overnight stops</div>
+        <div class="phase-stat">~25 km avg</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DAY 12 -->
+  <div class="sg-content-inner">
+    <div class="sg-top">
+      <div><div class="sg-daynum">Day 12</div><div class="sg-title">🏟️ Saumur → Gennes → Les Rosiers</div></div>
+      <div class="sg-km ride">~25 km</div>
+    </div>
+    <div class="sg-desc">A peaceful stage through lush Anjou countryside. Stop in Gennes — the small Roman amphitheatre here is free to enter and children can run around the ancient tiers where gladiators once fought. The landscape gets visibly greener as you enter Anjou. Les Rosiers is a quiet riverside village, good campsite, excellent boulangerie.</div>
+    <div class="sg-detail-grid">
+      <div class="sg-detail">
+        <div class="sg-detail-label">🏕️ Stay</div>
+        <div class="sg-detail-content"><strong>Camping Val de Loire</strong>, Les Rosiers-sur-Loire — quiet, family-friendly, on the Loire. ~€14/night.<br>+33 2 41 51 94 33</div>
+      </div>
+      <div class="sg-detail">
+        <div class="sg-detail-label">🏟️ Amphithéâtre de Gennes</div>
+        <div class="sg-detail-content">1st–2nd century Roman amphitheatre. Free entry. Not on the main route — ask locally or use Google Maps. 15-min detour, absolutely worth it. Kids love running down the banks.</div>
+      </div>
+      <div class="sg-detail">
+        <div class="sg-detail-label">📝 Anjou note</div>
+        <div class="sg-detail-content">From Saumur west, the scenery becomes quieter and less touristy — more authentic villages, fewer crowds. The famous Anjou "douceur" (sweetness) is real and palpable.</div>
+      </div>
+    </div>
+    <div class="tags"><span class="tag tag-camp">🏕️ Camp</span><span class="tag tag-kids">🏟️ Roman amphitheatre</span></div>
+  </div>
+
+  <!-- DAY 13 -->
+  <div class="sg-content-inner">
+    <div class="sg-top">
+      <div><div class="sg-daynum">Day 13</div><div class="sg-title">🌊 Les Rosiers → Béhuard → Angers</div></div>
+      <div class="sg-km ride">~28 km</div>
+    </div>
+    <div class="sg-desc">Stop at Béhuard — France's only commune situated on an island in the Loire. A tiny enchanting village a few hundred metres wide, with a 15th-century church built directly on a rock outcrop. Walk around in 20 minutes — magical. Then into Angers: one of the best cities in western France, with a massive black-and-white striped medieval fortress.</div>
+    <div class="sg-detail-grid">
+      <div class="sg-detail">
+        <div class="sg-detail-label">🏕️ Stay — BOOK NOW ⚡</div>
+        <div class="sg-detail-content"><strong>Camping du Port Caroline</strong> — Accueil Vélo rated, 3-star, right on the EV6 route. From €7/pitch. Fills fast in August.<br><a href="https://www.campingportcaroline.fr">campingportcaroline.fr</a></div>
+      </div>
+      <div class="sg-detail">
+        <div class="sg-detail-label">🌊 Béhuard Island</div>
+        <div class="sg-detail-content">France's only Loire island commune. Free to visit — cycle across the bridge. 20 minutes to walk around. The church built into the rock is extraordinary. Perfect mid-ride stop.</div>
+      </div>
+      <div class="sg-detail">
+        <div class="sg-detail-label">🏰 Château d'Angers</div>
+        <div class="sg-detail-content">17 towers, 900m of walls. Inside: the Apocalypse Tapestry (100m long, 14th century). Adult ~€12 / under 18 EU free.<br><a href="https://www.chateau-angers.fr/en">chateau-angers.fr</a></div>
+      </div>
+    </div>
+    <div class="tags"><span class="tag tag-camp">🏕️ Camp</span><span class="tag tag-chateau">🏰 Giant fortress</span><span class="tag tag-kids">🌊 Island village</span><span class="tag tag-urgent">⚡ Book Port Caroline</span></div>
+  </div>
+
+  <!-- DAY 14 REST ANGERS -->
+  <div class="sg-content-inner rest">
+    <div class="sg-top">
+      <div><div class="sg-daynum">Day 14 — Rest Day</div><div class="sg-title">🖼️ Angers — Fortress &amp; tapestry day</div></div>
+      <div class="sg-km rest">0 km 😴</div>
+    </div>
+    <div class="sg-desc">The Château d'Angers and its Apocalypse Tapestry deserve a full day. The tapestry is 100 metres long and dates from the 1370s — the scale genuinely stops children in their tracks. Afterwards: city parks, the Cointreau distillery tour (adults — Cointreau was invented here), or simply rest in the city. Consider upgrading to an AirBnb for this night — a washing machine and real beds before the final push to Nantes.</div>
+    <div class="tags"><span class="tag tag-rest">😴 Rest day</span><span class="tag tag-chateau">🖼️ Apocalypse Tapestry</span><span class="tag tag-airbnb">🏠 AirBnb option</span><span class="tag tag-food">🧺 Laundry &amp; repack</span></div>
+  </div>
+
+  <!-- ─── PHASE 4: ANGERS → NANTES ─── -->
+  <div class="phase-header" style="background:var(--phase5);">
+    <div class="ph-num">4</div>
+    <div>
+      <h3>Angers → Nantes</h3>
+      <p>Days 15–22 · ~90 km · The Atlantic arrives. The Loire widens into something wild and majestic. Muscadet wine country, river swimming, a historic border crossing, and the most spectacular children's attraction in France as a grand finale.</p>
+      <div class="phase-stats">
+        <div class="phase-stat">🚲 6 riding days</div>
+        <div class="phase-stat">😴 2 Nantes city nights</div>
+        <div class="phase-stat">📍 5 overnight stops</div>
+        <div class="phase-stat">~22 km avg</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DAY 15 -->
+  <div class="sg-content-inner">
+    <div class="sg-top">
+      <div><div class="sg-daynum">Day 15</div><div class="sg-title">🗺️ Angers → Ingrandes-sur-Loire</div></div>
+      <div class="sg-km ride">~25 km</div>
+    </div>
+    <div class="sg-desc">The Loire begins to widen and feel more Atlantic. Easy cycling through meadows and quiet levée paths. Ingrandes was the historic border post between Anjou and Brittany — for centuries, salt and wine were taxed here as goods crossed between the two regions. Fun geography lesson: the kids can stand with one foot in "Anjou" and one in "Brittany."</div>
+    <div class="sg-detail-grid">
+      <div class="sg-detail">
+        <div class="sg-detail-label">🏕️ Stay</div>
+        <div class="sg-detail-content"><strong>Camping Municipal, Ingrandes-sur-Loire</strong> — basic, cheap, directly on the river. Walk-up fine. ~€8–10/night. If full, continue 10 km to Saint-Florent-le-Vieil.</div>
+      </div>
+      <div class="sg-detail">
+        <div class="sg-detail-label">🍷 Muscadet Begins</div>
+        <div class="sg-detail-content">You've entered Muscadet wine country — the Loire's great crisp white wine. Look for roadside dégustation signs. Most wineries welcome cyclists and offer free tastings in summer.</div>
+      </div>
+      <div class="sg-detail">
+        <div class="sg-detail-label">📝 Landscape shift</div>
+        <div class="sg-detail-content">From Angers west the scenery shifts from château country to estuarine wild — increasingly dramatic. The river is noticeably wider and faster-moving. Brittany is near.</div>
+      </div>
+    </div>
+    <div class="tags"><span class="tag tag-camp">🏕️ Camp</span><span class="tag tag-kids">🗺️ Anjou/Brittany border</span><span class="tag tag-food">🍷 Muscadet country</span></div>
+  </div>
+
+  <!-- DAY 16 -->
+  <div class="sg-content-inner">
+    <div class="sg-top">
+      <div><div class="sg-daynum">Day 16</div><div class="sg-title">🏊 Ingrandes → Saint-Florent → Ancenis</div></div>
+      <div class="sg-km ride">~22 km</div>
+    </div>
+    <div class="sg-desc">A beautiful, easy wind-down stage. The Loire is wide and powerful here. Saint-Florent-le-Vieil has a remarkable clifftop abbey with panoramic river views — short detour worth taking. Ancenis is a charming small town with a ruined château and excellent supervised river swimming — a sandy beach on the Loire that's perfect for the kids all afternoon.</div>
+    <div class="sg-detail-grid">
+      <div class="sg-detail">
+        <div class="sg-detail-label">🏕️ Stay</div>
+        <div class="sg-detail-content"><strong>Camping Municipal de l'Île Mouchet</strong>, Ancenis — on an island in the Loire. Shaded, quiet, excellent river access. ~€12/night.<br>+33 2 40 83 08 43</div>
+      </div>
+      <div class="sg-detail">
+        <div class="sg-detail-label">🏊 River Beach</div>
+        <div class="sg-detail-content">Ancenis has a supervised river beach in July–August — lifeguard, sandbank, safe swimming area. Free. Perfect afternoon for all ages after a morning ride.</div>
+      </div>
+      <div class="sg-detail">
+        <div class="sg-detail-label">🕍 Saint-Florent Abbey</div>
+        <div class="sg-detail-content">Clifftop Benedictine abbey above the Loire — the views are spectacular. Free to visit the exterior. Short 3 km detour off the main route.</div>
+      </div>
+    </div>
+    <div class="tags"><span class="tag tag-camp">🏕️ Camp (island!)</span><span class="tag tag-swim">🏊 River beach</span><span class="tag tag-food">🍷 Winery visit</span></div>
+  </div>
+
+  <!-- DAY 17 -->
+  <div class="sg-content-inner">
+    <div class="sg-top">
+      <div><div class="sg-daynum">Day 17</div><div class="sg-title">🗼 Ancenis → Oudon → Nantes outskirts</div></div>
+      <div class="sg-km ride">~28 km</div>
+    </div>
+    <div class="sg-desc">The penultimate riding day. Stop at Oudon — a beautifully preserved 14th-century octagonal tower above the Loire (climb for panoramic views, ~€4/adult). The path becomes increasingly shaded and lush approaching Nantes, following a towpath through willow groves. Last night under canvas — make it memorable. Tell the kids: tomorrow is the mechanical elephant.</div>
+    <div class="sg-detail-grid">
+      <div class="sg-detail">
+        <div class="sg-detail-label">🏕️ Final Camp Night</div>
+        <div class="sg-detail-content"><strong>Camping de la Patissière</strong>, Barbechat or similar near Nantes suburbs. ~€15/night. Clean up thoroughly — you're checking into a hotel tomorrow.</div>
+      </div>
+      <div class="sg-detail">
+        <div class="sg-detail-label">🗼 Tour d'Oudon</div>
+        <div class="sg-detail-content">14th-century octagonal tower, beautifully preserved. Climb to the top for panoramic Loire views. Adult ~€4 / child ~€2. Takes 30 minutes. Worth the brief detour.</div>
+      </div>
+      <div class="sg-detail">
+        <div class="sg-detail-label">🍷 Muscadet Tasting</div>
+        <div class="sg-detail-content">This is the heart of Muscadet production. Many roadside wineries offer free dégustation. Ask the campsite to recommend the nearest one — great last-evening activity.</div>
+      </div>
+    </div>
+    <div class="tags"><span class="tag tag-camp">🏕️ Last camp night!</span><span class="tag tag-chateau">🗼 Medieval tower</span></div>
+  </div>
+
+  <!-- DAYS 18-20 NANTES -->
+  <div class="sg-content-inner" style="border-left:3px solid var(--phase5);">
+    <div class="sg-top">
+      <div><div class="sg-daynum">Days 18–20 🎉</div><div class="sg-title">🐘 NANTES — Grand Finale (3 nights)</div></div>
+      <div class="sg-km ride">~15 km into city</div>
+    </div>
+    <div class="sg-desc">Ride into Nantes via the shaded towpath. Cross the Tabarly bridge onto the Île de Nantes and head straight to Détours de Loire Nantes to drop off all bikes. Then: Les Machines de l'Île. A 12-metre mechanical elephant you can ride (carries 50 people), a three-storey Carousel of Sea Worlds, and workshops building new machines. Book tickets in advance — this sells out in August. The kids will talk about this for years. Two full city days after to explore, celebrate and rest.</div>
+    <div class="sg-detail-grid">
+      <div class="sg-detail">
+        <div class="sg-detail-label">🏨 Stay (3 nights)</div>
+        <div class="sg-detail-content"><strong>Hotel or AirBnb, central Nantes</strong> — you've earned it! Aim for Île de Nantes or city centre. Budget €100–150/night. Book well ahead for August.<br><a href="https://www.booking.com">booking.com</a></div>
+      </div>
+      <div class="sg-detail">
+        <div class="sg-detail-label">🐘 Les Machines — BOOK NOW</div>
+        <div class="sg-detail-content">Giant mechanical elephant (12m) + Carousel des Mondes Marins. Adult ~€26 / child ~€20. Sells out weeks ahead in August.<br><a href="https://www.lesmachines-nantes.fr/en/">lesmachines-nantes.fr</a></div>
+      </div>
+      <div class="sg-detail">
+        <div class="sg-detail-label">🚲 Bike Drop-Off</div>
+        <div class="sg-detail-content"><strong>Détours de Loire Nantes</strong> — drop all bikes and equipment on arrival day. They return everything to Blois. Get your deposits back. You're done!<br>detoursdeloire.com</div>
+      </div>
+    </div>
+    <div class="tags"><span class="tag tag-hotel">🏨 Hotel (3 nights)</span><span class="tag tag-kids">🐘 Mechanical elephant!</span><span class="tag tag-food">🎉 Celebration dinner</span><span class="tag tag-urgent">⚡ Book Les Machines NOW</span></div>
+  </div>
+
+  <!-- ══════════════════ BUDGET ══════════════════ -->
+  <div class="section-header">
+    <h2>Rough Budget</h2>
+    <span class="section-sub">Family of 5 · 22 days · Blois to Nantes</span>
+  </div>
+
+  <table class="budget-table">
+    <thead><tr><th>Category</th><th>Notes</th><th class="amount">Estimate</th></tr></thead>
+    <tbody>
+      <tr><td>✈️ Flights (5 people, Tel Aviv ↔ Paris)</td><td>Return, economy. Book early for August.</td><td class="amount">€1,500–2,500</td></tr>
+      <tr><td>🚆 Train Paris → Blois + Nantes → Paris</td><td>~€25pp each way · very easy connection</td><td class="amount">€250–400</td></tr>
+      <tr><td>🚲 Bike rental (4 bikes + child seat, 18 days, one-way Blois→Nantes)</td><td>Long-stay rate + 25% group drop-off discount</td><td class="amount">€900–1,100</td></tr>
+      <tr><td>🏕️ Camping (~17 nights, family pitch)</td><td>€12–22/night average</td><td class="amount">€200–370</td></tr>
+      <tr><td>🏨 Hotels/AirBnb (~4 nights: Blois, Tours, Angers option, Nantes ×2)</td><td>Blois 1 night + Tours 1 + Nantes 2</td><td class="amount">€400–600</td></tr>
+      <tr><td>🍽️ Food &amp; groceries</td><td>Mostly supermarket + occasional restaurant. ~€60–75/day family</td><td class="amount">€1,300–1,650</td></tr>
+      <tr><td>🏰 Châteaux &amp; attractions</td><td>Pick 7–8 main visits (Blois, Chaumont, Amboise ×2, Ussé, Chinon, Fontevraud, Saumur caves, Angers)</td><td class="amount">€300–500</td></tr>
+      <tr><td>🐘 Les Machines de l'Île, Nantes</td><td>Adult ×2 + child ×3 (elephant + carousel)</td><td class="amount">~€112</td></tr>
+      <tr><td>🚑 Travel insurance (family)</td><td>Essential — full medical + cancellation cover</td><td class="amount">€150–250</td></tr>
+      <tr><td>🛠️ Miscellaneous (sunscreen, repairs, etc.)</td><td></td><td class="amount">€150–250</td></tr>
+      <tr class="total"><td colspan="2"><strong>TOTAL ESTIMATE</strong></td><td class="amount"><strong>€5,300–7,700</strong></td></tr>
+    </tbody>
+  </table>
+
+  <div class="tip-box" style="margin-top:14px">
+    <strong>💡 Saving ~€1,700–2,300 vs the 35-day version:</strong> Fewer hotel nights, shorter bike rental, less food spend — same quality experience. The Orléans → Blois section you're skipping adds cost but not proportional value for a family.
+  </div>
+
+  <!-- ══════════════════ CONTACTS ══════════════════ -->
+  <div class="section-header">
+    <h2>Key Contacts &amp; Resources</h2>
+  </div>
+
+  <div class="contacts-grid">
+    <div class="contact-card">
+      <h4>🚲 Détours de Loire (Bikes)</h4>
+      <p>Pick up: Blois agency · Drop off: Nantes<br>Head office: +33 2 47 61 22 23<br><a href="https://www.detoursdeloire.com/en/">detoursdeloire.com</a><br>Open Apr–Sep: Mon–Sat 9–12:30, 14–19<br>Sun: 9:30–12:30, 15–18</p>
+    </div>
+    <div class="contact-card">
+      <h4>🗺️ La Loire à Vélo Official</h4>
+      <p>Interactive map, route info, Accueil Vélo accommodation:<br><a href="https://www.loirebybike.co.uk">loirebybike.co.uk</a> (English)<br><a href="https://www.loireavelotourisme.com">loireavelotourisme.com</a><br>Download the official app for offline maps.</p>
+    </div>
+    <div class="contact-card">
+      <h4>🚆 Train connections</h4>
+      <p>Paris Austerlitz → Blois: ~1h20 direct<br>Nantes → Paris Montparnasse: ~2h10 TGV<br>Train Vélo Loire (Jul–Sep): bikes on-board Orléans ↔ Saint-Nazaire<br><a href="https://www.sncf-connect.com">sncf-connect.com</a></p>
+    </div>
+    <div class="contact-card">
+      <h4>🏕️ Campsite Search</h4>
+      <p><a href="https://en.flowercampings.com">flowercampings.com</a> — curated network<br><a href="https://www.eurocampings.co.uk">eurocampings.co.uk</a> — reviews &amp; booking<br>Look for the <strong>Accueil Vélo</strong> green label — guarantees bike storage, repair tools, cyclist welcome.</p>
+    </div>
+    <div class="contact-card">
+      <h4>🏥 Emergency &amp; Practical</h4>
+      <p>European emergency: <strong>112</strong><br>SAMU (medical): <strong>15</strong><br>Pharmacies (green cross): open daily in all towns<br>Get European Health Insurance Card (EHIC) for all 5 family members before departure.</p>
+    </div>
+    <div class="contact-card">
+      <h4>📱 Key Apps</h4>
+      <p><strong>Loire à Vélo app</strong> — offline maps<br><strong>SNCF Connect</strong> — train bookings<br><strong>Booking.com / Airbnb</strong> — accommodation<br><strong>Google Maps</strong> — campsite navigation<br><strong>Météo France</strong> — French weather</p>
+    </div>
+  </div>
+
+  <!-- ══════════════════ PACKING ══════════════════ -->
+  <div class="section-header">
+    <h2>Packing Essentials</h2>
+    <span class="section-sub">Keep it light — max 15 kg per adult pannier set</span>
+  </div>
+
+  <div class="checklist">
+    <div class="check-item"><div class="check-box"></div>Lightweight 3–4 person tent (free-standing)</div>
+    <div class="check-item"><div class="check-box"></div>Summer sleeping bags (3-season)</div>
+    <div class="check-item"><div class="check-box"></div>Sleeping mats / inflatable pads</div>
+    <div class="check-item"><div class="check-box"></div>Cycling helmets — all 5 (mandatory under-12s)</div>
+    <div class="check-item"><div class="check-box"></div>SPF50 sunscreen (large quantities)</div>
+    <div class="check-item"><div class="check-box"></div>Insect repellent (Loire evenings are buggy)</div>
+    <div class="check-item"><div class="check-box"></div>2 sets cycling clothes per adult</div>
+    <div class="check-item"><div class="check-box"></div>Rain jacket — 1 per person (even in August)</div>
+    <div class="check-item"><div class="check-box"></div>Lightweight evening shoes</div>
+    <div class="check-item"><div class="check-box"></div>Swimwear — everyone</div>
+    <div class="check-item"><div class="check-box"></div>Quick-dry towels — 1 per person</div>
+    <div class="check-item"><div class="check-box"></div>Basic first aid kit</div>
+    <div class="check-item"><div class="check-box"></div>2L water bottles per adult</div>
+    <div class="check-item"><div class="check-box"></div>Small camp cooking kit</div>
+    <div class="check-item"><div class="check-box"></div>Headlamps — 1 per person</div>
+    <div class="check-item"><div class="check-box"></div>Phone chargers + power bank</div>
+    <div class="check-item"><div class="check-box"></div>European travel adaptor</div>
+    <div class="check-item"><div class="check-box"></div>EHIC card — all 5 family members</div>
+    <div class="check-item"><div class="check-box"></div>Passports + printed insurance docs</div>
+    <div class="check-item"><div class="check-box"></div>Snacks for riding (nuts, dates, energy bars)</div>
+  </div>
+
+</div><!-- /container -->
+
+<!-- FOOTER -->
+<div class="footer">
+  <strong>Loire à Vélo · Blois to Nantes · 22 Days · August 2026</strong><br>
+  Family of 5 · ages 4, 8, 11, 41, 43 · ~460 km · mostly camping<br><br>
+  Route: <a href="https://www.loirebybike.co.uk" style="color:var(--gold-light)">loirebybike.co.uk</a> ·
+  Bikes: <a href="https://www.detoursdeloire.com/en/" style="color:var(--gold-light)">detoursdeloire.com</a> ·
+  Nantes: <a href="https://www.lesmachines-nantes.fr/en/" style="color:var(--gold-light)">lesmachines-nantes.fr</a>
+</div>
+
+<!-- ══════════════════ MAP SCRIPT ══════════════════ -->
+<script>
+(function() {
+  const map = L.map('map', { zoomControl: true }).setView([47.32, 0.1], 8);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© OpenStreetMap contributors', maxZoom: 18
+  }).addTo(map);
+
+  const stops = [
+    {
+      day:'Day 1', phase:1, color:'#2d5a27', emoji:'🚲',
+      name:'Blois — Start', lat:47.5857, lng:1.3307,
+      desc:'Pick up bikes at Détours de Loire Blois. Explore the Royal Château (4 architectural styles, 7 French kings). Evening son-et-lumière light show on the château — brilliant for kids.',
+      stay:'🏨 Hotel recommended (1 night) · or Camping du Lac de Loire',
+      highlight:'Royal Château de Blois · Maison de la Magie ✨',
+      km:'0 km (arrival)', booking:'Détours de Loire Blois: detoursdeloire.com',
+      gmaps:'https://maps.google.com/?q=Royal+Château+of+Blois'
+    },
+    {
+      day:'Day 2', phase:1, color:'#2d5a27', emoji:'🌸',
+      name:'Chaumont-sur-Loire', lat:47.4766, lng:1.1833,
+      desc:'Short first riding day. The International Garden Festival runs all summer — 30+ contemporary themed gardens on the château grounds. One of the most memorable stops for kids on the entire route.',
+      stay:'🏕️ Camping de la Grande Tortue, Candé-sur-Beuvron (~3 km)',
+      highlight:'Festival International des Jardins · château interior',
+      km:'~20 km from Blois', booking:'Book ahead: +33 2 54 44 15 20 · la-grande-tortue.com',
+      gmaps:'https://maps.google.com/?q=Domaine+de+Chaumont-sur-Loire'
+    },
+    {
+      day:'Days 3–4', phase:1, color:'#2d5a27', emoji:'🎨',
+      name:'Amboise', lat:47.4103, lng:0.9922,
+      desc:"Clos Lucé: Leonardo da Vinci's final home with life-size models of his inventions in the gardens. Royal Château. River beach. Kayaking. Rest day on Day 4 — the trip's first real resort feeling.",
+      stay:'🏕️ Camping de l\'Île d\'Or ⚡ BOOK IMMEDIATELY',
+      highlight:"Clos Lucé / da Vinci 🚁 · Château Royal · river beach & kayaks",
+      km:'~23 km from Chaumont', booking:'⚡ BOOK NOW: +33 2 47 57 23 37 · campingamboise.com',
+      gmaps:'https://maps.google.com/?q=Château+du+Clos+Lucé,+Amboise'
+    },
+    {
+      day:'Days 5–6', phase:1, color:'#2d5a27', emoji:'🏛️',
+      name:'Tours', lat:47.3898, lng:0.6892,
+      desc:'Major city stop — 1 riding day + 1 rest day. Best food on the route. Touraine Aquarium, medieval old town. AirBnb for the night with a washing machine. Villandry Renaissance gardens (day trip option).',
+      stay:'🏠 AirBnb in the old town (1 night) · book well ahead for August',
+      highlight:'Touraine Aquarium 🐠 · Villandry gardens · Place Plumereau',
+      km:'~25 km from Amboise', booking:'airbnb.com · Book well ahead for August',
+      gmaps:'https://maps.google.com/?q=Tours,+France'
+    },
+    {
+      day:'Day 7', phase:1, color:'#2d5a27', emoji:'🏰',
+      name:'Azay-le-Rideau', lat:47.2590, lng:0.4657,
+      desc:'The "floating château" — a Renaissance masterpiece appearing to float on the Indre river. UNESCO World Heritage. Via Villandry if you skipped the day trip. The 4-year-old will call it the princess castle.',
+      stay:'🏕️ Camping Municipal du Sabot (5 min from château)',
+      highlight:'Château d\'Azay-le-Rideau (1518) · moated Renaissance jewel',
+      km:'~28 km from Tours (via Villandry)', booking:'Walk-up or call: +33 2 47 45 42 72',
+      gmaps:'https://maps.google.com/?q=Château+d\'Azay-le-Rideau'
+    },
+    {
+      day:'Day 8', phase:2, color:'#8a6a1e', emoji:'👸',
+      name:'Chinon (via Château d\'Ussé)', lat:47.1681, lng:0.2366,
+      desc:'Château d\'Ussé: the Sleeping Beauty castle — the 4-year-old will be speechless. Then Chinon: magnificent clifftop medieval fortress. Half-rest Day 9 in Chinon for cave dwellings and river swimming.',
+      stay:'🏕️ Camping de l\'Île Auger (river island campsite)',
+      highlight:"👸 Sleeping Beauty castle · Forteresse Royale · troglodyte caves",
+      km:'~25 km from Azay', booking:'+33 2 47 93 08 35 · camping-chinon.com',
+      gmaps:'https://maps.google.com/?q=Forteresse+Royale+de+Chinon'
+    },
+    {
+      day:'Day 8 detour', phase:2, color:'#8a6a1e', emoji:'👸',
+      name:'Château d\'Ussé', lat:47.2499, lng:0.2917,
+      desc:'THE fairy-tale castle — directly inspired Charles Perrault\'s Sleeping Beauty. Gleaming white towers, turrets, wax fairy-tale scenes inside, peacocks in the gardens. Adult ~€17 / child 8–16 ~€11 / under 8 free.',
+      stay:'(En route to Chinon — not an overnight stop)',
+      highlight:'The Sleeping Beauty Castle — must-see for ages 4 and 8',
+      km:'En route from Azay to Chinon', booking:'chateaudusse.fr · +33 2 47 95 54 05',
+      gmaps:'https://maps.google.com/?q=Château+d\'Ussé,+Rigny-Ussé'
+    },
+    {
+      day:'Day 10', phase:2, color:'#8a6a1e', emoji:'⛪',
+      name:'Fontevraud Abbey', lat:47.1818, lng:0.0500,
+      desc:'Mid-stage stop on the way to Saumur. One of Europe\'s largest medieval complexes — tombs of Eleanor of Aquitaine and Richard the Lionheart. One of the most historically significant sites on the entire route.',
+      stay:'(Continue to Saumur for camp — 30 km day total)',
+      highlight:'Royal Abbey · Plantagenet royal tombs · Eleanor of Aquitaine',
+      km:'En route from Chinon to Saumur', booking:'fontevraud.fr · adult ~€12 / child ~€7',
+      gmaps:'https://maps.google.com/?q=Fontevraud+l\'Abbaye+Royale'
+    },
+    {
+      day:'Days 10–11', phase:2, color:'#8a6a1e', emoji:'🏝️',
+      name:'Saumur', lat:47.2571, lng:-0.0724,
+      desc:'Best campsite on the route: Île d\'Offard — on an island in the middle of the Loire. Château de Saumur, mushroom caves (utterly unique underground world), sparkling wine tasting. Full rest day on Day 11.',
+      stay:'🏕️ Camping Île d\'Offard ⚡ BOOK IMMEDIATELY',
+      highlight:'Château de Saumur · Mushroom caves 🍄 · Loire island swimming',
+      km:'~30 km from Chinon', booking:'⚡ BOOK NOW: +33 2 41 40 30 00 · saumur-camping.com',
+      gmaps:'https://maps.google.com/?q=Château+de+Saumur'
+    },
+    {
+      day:'Days 12–13', phase:3, color:'#b5341c', emoji:'🏰',
+      name:'Angers', lat:47.4700, lng:-0.5600,
+      desc:'Via Gennes (Roman amphitheatre) and Béhuard (Loire island village). Château d\'Angers: massive medieval fortress with the world\'s largest medieval tapestry — the Apocalypse Tapestry, 100 metres long, from 1370.',
+      stay:'🏕️ Camping du Port Caroline ⚡ BOOK NOW',
+      highlight:"Château d'Angers · Apocalypse Tapestry 🖼️ · Béhuard island · Roman amphitheatre",
+      km:'~53 km from Saumur (split over 2 days)', booking:'⚡ campingportcaroline.fr',
+      gmaps:'https://maps.google.com/?q=Château+d\'Angers'
+    },
+    {
+      day:'Day 14 detour', phase:3, color:'#b5341c', emoji:'🌊',
+      name:'Béhuard Island', lat:47.3795, lng:-0.6437,
+      desc:'France\'s only commune on an island in the Loire. Tiny and enchanting — a few hundred metres wide, with a 15th-century church built directly on a rock outcrop. Walk around in 20 minutes. A magical brief stop.',
+      stay:'(En route to Angers — not an overnight stop)',
+      highlight:'Only Loire island commune · church built into the rock',
+      km:'En route from Les Rosiers to Angers', booking:'Free to visit — just cycle across the bridge',
+      gmaps:'https://maps.google.com/?q=Béhuard,France'
+    },
+    {
+      day:'Day 15', phase:4, color:'#7b3f8a', emoji:'🗺️',
+      name:'Ingrandes-sur-Loire', lat:47.4170, lng:-0.9275,
+      desc:'Easy cycling through meadows. Historic Anjou/Brittany border crossing — kids can stand with one foot in each region! Muscadet wine country begins. Very relaxed stage.',
+      stay:'🏕️ Camping Municipal (walk-up fine) · ~€8–10/night',
+      highlight:'Historic Anjou/Brittany border · Muscadet country begins',
+      km:'~25 km from Angers', booking:'Walk-up fine most days',
+      gmaps:'https://maps.google.com/?q=Ingrandes-sur-Loire,France'
+    },
+    {
+      day:'Day 16', phase:4, color:'#7b3f8a', emoji:'🏊',
+      name:'Ancenis', lat:47.3655, lng:-1.1775,
+      desc:'Beautiful stage. Supervised river beach in summer — sandbank, lifeguard, free. Saint-Florent clifftop abbey en route. Island campsite in the Loire. Very relaxed — the trip\'s wind-down begins.',
+      stay:'🏕️ Camping de l\'Île Mouchet (Loire island) · ~€12/night',
+      highlight:'River beach 🏊 · Saint-Florent abbey · Muscadet winery visit',
+      km:'~22 km from Ingrandes', booking:'+33 2 40 83 08 43',
+      gmaps:'https://maps.google.com/?q=Ancenis,France'
+    },
+    {
+      day:'Day 17', phase:4, color:'#7b3f8a', emoji:'🗼',
+      name:'Oudon → Nantes outskirts', lat:47.3494, lng:-1.2958,
+      desc:'Penultimate riding day. Stop at Oudon\'s 14th-century tower (climb for panoramic Loire views). Path grows lush approaching Nantes. Last night under canvas. Tell the kids: tomorrow is the mechanical elephant.',
+      stay:'🏕️ Final camp night near Nantes · ~€15/night',
+      highlight:'Tour d\'Oudon (14th century) · last Muscadet tasting',
+      km:'~28 km from Ancenis', booking:'Camping de la Patissière or similar',
+      gmaps:'https://maps.google.com/?q=Oudon,France'
+    },
+    {
+      day:'Days 18–20 🎉', phase:4, color:'#7b3f8a', emoji:'🐘',
+      name:'Nantes — Grand Finale', lat:47.2062, lng:-1.5644,
+      desc:'Drop bikes at Détours de Loire Nantes. Then: Les Machines de l\'Île — a 12-metre mechanical elephant you can ride, plus the Carousel of Sea Worlds. One of the most extraordinary children\'s attractions in Europe. Book well ahead — sells out in August.',
+      stay:'🏨 Hotel or AirBnb (3 nights) — you\'ve earned it!',
+      highlight:'Les Machines de l\'Île 🐘 · Île de Nantes · celebration dinner!',
+      km:'~15 km into city', booking:'⚡ Book tickets NOW: lesmachines-nantes.fr',
+      gmaps:'https://maps.google.com/?q=Les+Machines+de+l\'Île+Nantes'
+    }
+  ];
+
+  // Route line
+  const coords = stops.map(s => [s.lat, s.lng]);
+  L.polyline(coords, { color:'#2d5a27', weight:3.5, opacity:0.5, dashArray:'8,6' }).addTo(map);
+
+  stops.forEach((s, i) => {
+    const urgent = s.booking.includes('⚡');
+    const big = i === 0 || i === stops.length - 1;
+    const sz = big ? 36 : 28;
+    const fs = big ? 16 : 12;
+
+    const icon = L.divIcon({
+      className:'',
+      html:`<div style="width:${sz}px;height:${sz}px;background:${s.color};border:3px solid white;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:${fs}px;box-shadow:0 3px 10px rgba(0,0,0,.35);cursor:pointer;${urgent?'outline:3px solid #b5341c;outline-offset:2px;':''};">${s.emoji}</div>`,
+      iconSize:[sz,sz], iconAnchor:[sz/2,sz/2]
+    });
+
+    const urgBadge = urgent ? `<div style="background:#fff0f0;border:1px solid #f5c6cb;border-radius:6px;padding:5px 8px;margin-top:7px;font-size:.8em;color:#721c24;"><strong>⚡ Book this immediately</strong></div>` : '';
+
+    const popup = L.popup({ maxWidth:290 }).setContent(`
+      <div style="font-family:'Lato',sans-serif;padding:3px;">
+        <div style="font-size:.68em;text-transform:uppercase;letter-spacing:1.5px;color:#999;margin-bottom:3px;">${s.day}</div>
+        <div style="font-size:1.05em;font-weight:700;color:#1a1a1a;margin-bottom:6px;">${s.emoji} ${s.name}</div>
+        <div style="font-size:.81em;color:#444;line-height:1.5;margin-bottom:8px;">${s.desc}</div>
+        <div style="background:#f0f9f0;border-radius:6px;padding:6px 8px;margin-bottom:5px;font-size:.78em;">
+          <div style="color:#2d5a27;font-weight:700;margin-bottom:1px;">Where to stay</div>
+          <div style="color:#555;">${s.stay}</div>
+        </div>
+        <div style="background:#f5f0fa;border-radius:6px;padding:6px 8px;margin-bottom:7px;font-size:.78em;">
+          <div style="color:#7b3f8a;font-weight:700;margin-bottom:1px;">✨ Highlights</div>
+          <div style="color:#555;">${s.highlight}</div>
+        </div>
+        <div style="font-size:.76em;color:#888;margin-bottom:5px;">🚲 ${s.km}</div>
+        ${urgBadge}
+        <div style="margin-top:9px;padding-top:7px;border-top:1px solid #eee;">
+          <a href="${s.gmaps}" target="_blank" style="color:#3a7ca5;font-weight:700;text-decoration:none;font-size:.82em;">📍 Open in Google Maps →</a>
+        </div>
+      </div>
+    `);
+
+    L.marker([s.lat, s.lng], { icon }).addTo(map).bindPopup(popup);
+  });
+
+  // Start / Finish labels
+  L.marker([47.5857, 1.3307], { icon: L.divIcon({
+    className:'',
+    html:'<div style="background:#2d5a27;color:white;padding:3px 8px;border-radius:4px;font-size:11px;font-weight:700;white-space:nowrap;font-family:Lato,sans-serif;box-shadow:0 2px 6px rgba(0,0,0,.2);">▶ START · Blois</div>',
+    iconAnchor:[20,-10]
+  })}).addTo(map);
+
+  L.marker([47.2062, -1.5644], { icon: L.divIcon({
+    className:'',
+    html:'<div style="background:#7b3f8a;color:white;padding:3px 8px;border-radius:4px;font-size:11px;font-weight:700;white-space:nowrap;font-family:Lato,sans-serif;box-shadow:0 2px 6px rgba(0,0,0,.2);">🎉 FINISH · Nantes</div>',
+    iconAnchor:[20,-10]
+  })}).addTo(map);
+
+})();
+</script>
+
+</body>
+</html>
