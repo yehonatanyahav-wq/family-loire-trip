@@ -1,0 +1,1127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Paris — Family Trip 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --cream: #faf7f2;
+      --warm-white: #fff9f2;
+      --charcoal: #2c2c2c;
+      --soft-grey: #6b6b6b;
+      --paris-blue: #1a3a5c;
+      --paris-gold: #c9a84c;
+      --paris-rose: #c2707a;
+      --paris-sage: #6b8e6e;
+      --tag-blue: #e8f0f8;
+      --tag-gold: #fdf5e0;
+      --tag-rose: #fce8ea;
+      --tag-sage: #e8f2e9;
+      --border: #e8e0d4;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--cream);
+      color: var(--charcoal);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      line-height: 1.7;
+    }
+
+    /* ── NAV ── */
+    .nav {
+      background: var(--paris-blue);
+      padding: 14px 32px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .nav a {
+      color: rgba(255,255,255,0.7);
+      text-decoration: none;
+      font-size: 13px;
+      letter-spacing: 0.04em;
+      transition: color 0.2s;
+    }
+    .nav a:hover { color: #fff; }
+    .nav .sep { color: rgba(255,255,255,0.3); }
+    .nav .current { color: var(--paris-gold); font-weight: 500; }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative;
+      background: var(--paris-blue);
+      min-height: 420px;
+      display: flex;
+      align-items: flex-end;
+      overflow: hidden;
+      padding: 0 32px 48px;
+    }
+
+    .hero-skyline {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 100%;
+      opacity: 0.15;
+    }
+
+    .hero-stars {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-image:
+        radial-gradient(circle, rgba(255,255,255,0.8) 1px, transparent 1px),
+        radial-gradient(circle, rgba(255,255,255,0.5) 1px, transparent 1px),
+        radial-gradient(circle, rgba(255,255,255,0.3) 1px, transparent 1px);
+      background-size: 200px 200px, 150px 150px, 100px 100px;
+      background-position: 0 0, 75px 75px, 37px 100px;
+    }
+
+    .hero-glow {
+      position: absolute;
+      bottom: -50px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 500px;
+      height: 200px;
+      background: radial-gradient(ellipse, rgba(201,168,76,0.25) 0%, transparent 70%);
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 780px;
+    }
+
+    .hero-eyebrow {
+      color: var(--paris-gold);
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.4rem, 5vw, 3.8rem);
+      color: #fff;
+      line-height: 1.15;
+      margin-bottom: 16px;
+    }
+
+    .hero h1 em {
+      font-style: italic;
+      color: var(--paris-gold);
+    }
+
+    .hero-sub {
+      color: rgba(255,255,255,0.7);
+      font-size: 15px;
+      max-width: 520px;
+      margin-bottom: 28px;
+    }
+
+    .booking-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .badge {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 6px;
+      padding: 7px 14px;
+      font-size: 12px;
+      color: rgba(255,255,255,0.85);
+      backdrop-filter: blur(4px);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .badge .badge-icon { font-size: 14px; }
+    .badge strong { color: #fff; font-weight: 500; }
+
+    /* ── EIFFEL TOWER SVG ── */
+    .eiffel-wrap {
+      position: absolute;
+      right: 60px;
+      bottom: 0;
+      z-index: 1;
+      opacity: 0.35;
+    }
+
+    /* ── MAIN LAYOUT ── */
+    .main {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 48px 24px 80px;
+    }
+
+    /* ── TRIP OVERVIEW CARDS ── */
+    .overview-strip {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 52px;
+    }
+
+    .overview-cell {
+      background: var(--warm-white);
+      padding: 20px 18px;
+    }
+
+    .overview-label {
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--soft-grey);
+      margin-bottom: 4px;
+    }
+
+    .overview-value {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.35rem;
+      color: var(--paris-blue);
+      line-height: 1.2;
+    }
+
+    .overview-sub {
+      font-size: 11px;
+      color: var(--soft-grey);
+      margin-top: 2px;
+    }
+
+    /* ── SECTION HEADER ── */
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem;
+      color: var(--paris-blue);
+      margin-bottom: 6px;
+    }
+
+    .section-intro {
+      color: var(--soft-grey);
+      font-size: 14px;
+      margin-bottom: 28px;
+      max-width: 580px;
+    }
+
+    /* ── DAY CARDS ── */
+    .days-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      position: relative;
+    }
+
+    .days-list::before {
+      content: '';
+      position: absolute;
+      left: 28px;
+      top: 36px;
+      bottom: 36px;
+      width: 2px;
+      background: linear-gradient(to bottom, var(--paris-gold), var(--paris-blue));
+      opacity: 0.25;
+    }
+
+    .day-card {
+      display: flex;
+      gap: 28px;
+      padding: 28px 0;
+      border-bottom: 1px solid var(--border);
+      animation: fadeUp 0.5s ease both;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .day-card:nth-child(1) { animation-delay: 0.05s; }
+    .day-card:nth-child(2) { animation-delay: 0.15s; }
+    .day-card:nth-child(3) { animation-delay: 0.25s; }
+    .day-card:nth-child(4) { animation-delay: 0.35s; }
+    .day-card:nth-child(5) { animation-delay: 0.45s; }
+
+    .day-card:last-child { border-bottom: none; }
+
+    .day-dot-col {
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      padding-top: 4px;
+    }
+
+    .day-num {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-weight: 500;
+      font-size: 10px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      flex-shrink: 0;
+    }
+
+    .day-num .num {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+      line-height: 1;
+      letter-spacing: 0;
+    }
+
+    .day-num.arrival { background: var(--tag-gold); color: #8a6520; }
+    .day-num.explore { background: var(--tag-blue); color: var(--paris-blue); }
+    .day-num.transit { background: var(--tag-sage); color: #3d6b42; }
+    .day-num.depart  { background: var(--tag-rose); color: #8a3a43; }
+
+    .day-body { flex: 1; }
+
+    .day-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .day-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.15rem;
+      color: var(--charcoal);
+    }
+
+    .day-date {
+      font-size: 12px;
+      color: var(--soft-grey);
+      background: var(--cream);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 3px 12px;
+      white-space: nowrap;
+    }
+
+    .day-desc {
+      font-size: 14px;
+      color: #4a4a4a;
+      margin-bottom: 14px;
+      line-height: 1.75;
+    }
+
+    .activities {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .activity {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      font-size: 13.5px;
+    }
+
+    .activity-icon {
+      font-size: 16px;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .activity-text { color: #4a4a4a; }
+    .activity-text strong { color: var(--charcoal); font-weight: 500; }
+
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 14px;
+    }
+
+    .tag {
+      font-size: 11px;
+      font-weight: 500;
+      padding: 4px 10px;
+      border-radius: 4px;
+      letter-spacing: 0.02em;
+    }
+
+    .tag-blue { background: var(--tag-blue); color: var(--paris-blue); }
+    .tag-gold { background: var(--tag-gold); color: #7a5c18; }
+    .tag-rose { background: var(--tag-rose); color: #8a3a43; }
+    .tag-sage { background: var(--tag-sage); color: #3d6b42; }
+    .tag-grey { background: #efefef; color: #555; }
+
+    /* ── TIP BOX ── */
+    .tip-box {
+      background: var(--tag-gold);
+      border-left: 3px solid var(--paris-gold);
+      border-radius: 0 8px 8px 0;
+      padding: 16px 18px;
+      margin: 32px 0;
+      font-size: 13.5px;
+      color: #5a4010;
+      line-height: 1.7;
+    }
+
+    .tip-box strong { font-weight: 500; display: block; margin-bottom: 4px; }
+
+    /* ── TRANSPORT INFO ── */
+    .transport-card {
+      background: var(--warm-white);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      margin: 32px 0;
+    }
+
+    .transport-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      color: var(--paris-blue);
+      margin-bottom: 16px;
+    }
+
+    .transport-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 13.5px;
+    }
+
+    .transport-row:last-child { border-bottom: none; }
+
+    .transport-icon { font-size: 20px; flex-shrink: 0; width: 32px; text-align: center; }
+    .transport-detail { flex: 1; }
+    .transport-detail strong { display: block; color: var(--charcoal); font-weight: 500; }
+    .transport-detail span { color: var(--soft-grey); font-size: 12px; }
+    .transport-time {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      color: var(--paris-blue);
+      text-align: right;
+      white-space: nowrap;
+    }
+
+    /* ── HIGHLIGHTS GRID ── */
+    .highlights-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+      margin: 32px 0 48px;
+    }
+
+    .highlight-card {
+      background: var(--warm-white);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 20px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .highlight-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+    }
+
+    .highlight-emoji { font-size: 28px; margin-bottom: 10px; display: block; }
+    .highlight-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      color: var(--paris-blue);
+      margin-bottom: 6px;
+    }
+    .highlight-desc { font-size: 12.5px; color: var(--soft-grey); line-height: 1.6; }
+    .highlight-age {
+      font-size: 11px;
+      margin-top: 8px;
+      color: var(--paris-rose);
+      font-weight: 500;
+    }
+
+    /* ── NEXT SECTION ── */
+    .next-banner {
+      background: var(--paris-blue);
+      border-radius: 12px;
+      padding: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-top: 52px;
+    }
+
+    .next-text { color: rgba(255,255,255,0.8); font-size: 13px; }
+    .next-text strong { color: #fff; font-family: 'Playfair Display', serif; font-size: 1.2rem; display: block; margin-bottom: 4px; }
+
+    .next-links { display: flex; gap: 10px; flex-wrap: wrap; }
+    .next-link {
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.2);
+      color: #fff;
+      text-decoration: none;
+      padding: 10px 18px;
+      border-radius: 6px;
+      font-size: 13px;
+      transition: background 0.2s;
+    }
+    .next-link:hover { background: rgba(255,255,255,0.22); }
+    .next-link.primary {
+      background: var(--paris-gold);
+      border-color: var(--paris-gold);
+      color: #2c1a00;
+      font-weight: 500;
+    }
+    .next-link.primary:hover { background: #d4b05a; }
+
+    /* ── FOOTER ── */
+    .footer {
+      text-align: center;
+      padding: 24px;
+      font-size: 12px;
+      color: var(--soft-grey);
+      border-top: 1px solid var(--border);
+    }
+
+    /* ── STAY RECOMMENDATION ── */
+    .stay-box {
+      background: var(--warm-white);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+      margin: 32px 0 20px;
+    }
+
+    .stay-header {
+      background: var(--paris-blue);
+      padding: 16px 22px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .stay-header-icon { font-size: 22px; }
+
+    .stay-header-text { color: #fff; }
+    .stay-header-text strong { display: block; font-size: 15px; font-weight: 500; }
+    .stay-header-text span { font-size: 12px; color: rgba(255,255,255,0.65); }
+
+    .stay-body { padding: 20px 22px; }
+
+    .stay-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem;
+      color: var(--paris-blue);
+      margin-bottom: 4px;
+    }
+
+    .stay-address {
+      font-size: 12px;
+      color: var(--soft-grey);
+      margin-bottom: 14px;
+    }
+
+    .stay-pros {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .stay-pro {
+      display: flex;
+      gap: 8px;
+      align-items: flex-start;
+      font-size: 12.5px;
+      color: #4a4a4a;
+    }
+
+    .stay-pro-icon { font-size: 14px; flex-shrink: 0; margin-top: 1px; }
+
+    .stay-note {
+      font-size: 12.5px;
+      color: var(--soft-grey);
+      border-top: 1px solid var(--border);
+      padding-top: 12px;
+      line-height: 1.6;
+    }
+
+    .stay-note strong { color: var(--charcoal); }
+
+    /* ── ARRIVAL TIMELINE ── */
+    .arrival-note {
+      background: var(--tag-blue);
+      border: 1px solid #c0d8ee;
+      border-radius: 10px;
+      padding: 14px 18px;
+      margin-bottom: 22px;
+      font-size: 13px;
+      color: var(--paris-blue);
+      line-height: 1.65;
+    }
+
+    .arrival-note strong { font-weight: 500; }
+
+    .timeline {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      position: relative;
+      margin-bottom: 14px;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 52px;
+      top: 20px;
+      bottom: 20px;
+      width: 2px;
+      background: linear-gradient(to bottom, var(--paris-gold) 0%, var(--paris-blue) 100%);
+      opacity: 0.3;
+    }
+
+    .tl-row {
+      display: flex;
+      gap: 18px;
+      padding: 10px 0;
+      align-items: flex-start;
+    }
+
+    .tl-time {
+      width: 52px;
+      flex-shrink: 0;
+      text-align: right;
+      font-family: 'Playfair Display', serif;
+      font-size: 0.95rem;
+      color: var(--paris-blue);
+      font-weight: 700;
+      padding-top: 2px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .tl-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--paris-gold);
+      border: 2px solid white;
+      box-shadow: 0 0 0 2px var(--paris-gold);
+      flex-shrink: 0;
+      margin-top: 5px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .tl-dot.blue { background: var(--paris-blue); box-shadow: 0 0 0 2px var(--paris-blue); }
+    .tl-dot.green { background: var(--paris-sage); box-shadow: 0 0 0 2px var(--paris-sage); }
+
+    .tl-content { flex: 1; padding-bottom: 4px; }
+    .tl-label { font-weight: 500; font-size: 13.5px; color: var(--charcoal); margin-bottom: 2px; }
+    .tl-detail { font-size: 12.5px; color: var(--soft-grey); line-height: 1.6; }
+    .tl-detail em { color: #4a4a4a; font-style: normal; }
+
+    .tl-row.major .tl-time { color: var(--paris-gold); }
+    .tl-row.major .tl-label { font-size: 14px; color: var(--paris-blue); }
+
+    @media (max-width: 580px) {
+      .hero { padding: 0 20px 36px; min-height: 340px; }
+      .eiffel-wrap { right: -20px; opacity: 0.2; }
+      .days-list::before { left: 20px; }
+      .day-num { width: 46px; height: 46px; }
+      .day-num .num { font-size: 17px; }
+      .main { padding: 32px 16px 60px; }
+      .stay-pros { grid-template-columns: 1fr; }
+      .timeline::before { left: 48px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <a href="./index.html">🚲 Family Trip 2026</a>
+  <span class="sep">›</span>
+  <span class="current">🗼 Paris</span>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-stars"></div>
+  <div class="hero-glow"></div>
+
+  <!-- Eiffel Tower -->
+  <div class="eiffel-wrap">
+    <svg width="140" height="380" viewBox="0 0 140 380" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <polygon points="70,0 60,60 80,60" fill="white"/>
+      <rect x="62" y="55" width="16" height="6" fill="white" opacity="0.8"/>
+      <polygon points="60,60 42,150 98,150 80,60" fill="white"/>
+      <rect x="40" y="148" width="60" height="8" rx="2" fill="white" opacity="0.9"/>
+      <polygon points="42,155 14,280 126,280 98,155" fill="white"/>
+      <rect x="10" y="278" width="120" height="10" rx="2" fill="white"/>
+      <polygon points="14,285 0,340 140,340 126,285" fill="white"/>
+      <rect x="0" y="338" width="140" height="42" rx="0" fill="white" opacity="0.9"/>
+      <!-- cross beams -->
+      <line x1="45" y1="100" x2="95" y2="100" stroke="white" stroke-width="2" opacity="0.5"/>
+      <line x1="25" y1="210" x2="115" y2="210" stroke="white" stroke-width="2" opacity="0.5"/>
+      <line x1="8" y1="305" x2="132" y2="305" stroke="white" stroke-width="2" opacity="0.5"/>
+    </svg>
+  </div>
+
+  <div class="hero-content">
+    <div class="hero-eyebrow">Family Trip 2026 · Leg 1 of 2</div>
+    <h1>Bonjour, <em>Paris</em></h1>
+    <p class="hero-sub">
+      A few magical days in the city of light before the Loire cycling adventure begins. Landed via Orly — bikes can wait.
+    </p>
+    <div class="booking-badges">
+      <div class="badge"><span class="badge-icon">✈️</span><strong>Transavia FHT4PK</strong> · Tel Aviv → Paris Orly</div>
+      <div class="badge"><span class="badge-icon">🚂</span>Then → Orléans/Blois for the Loire</div>
+      <div class="badge"><span class="badge-icon">👨‍👩‍👧‍👦</span>Family of 5 · Ages 4, 8, 11, + 2 adults</div>
+    </div>
+  </div>
+</header>
+
+<!-- MAIN -->
+<main class="main">
+
+  <!-- OVERVIEW STRIP -->
+  <div class="overview-strip">
+    <div class="overview-cell">
+      <div class="overview-label">Arrival</div>
+      <div class="overview-value">Paris Orly</div>
+      <div class="overview-sub">Transavia · FHT4PK</div>
+    </div>
+    <div class="overview-cell">
+      <div class="overview-label">Paris Stay</div>
+      <div class="overview-value">3–4 nights</div>
+      <div class="overview-sub">Suggested duration</div>
+    </div>
+    <div class="overview-cell">
+      <div class="overview-label">Onward Train</div>
+      <div class="overview-value">→ Loire</div>
+      <div class="overview-sub">Paris Austerlitz/Bercy</div>
+    </div>
+    <div class="overview-cell">
+      <div class="overview-label">Return</div>
+      <div class="overview-value">Israir</div>
+      <div class="overview-sub">Booking #262847351</div>
+    </div>
+    <div class="overview-cell">
+      <div class="overview-label">Kids Ages</div>
+      <div class="overview-value">4 · 8 · 11</div>
+      <div class="overview-sub">All manageable in Paris!</div>
+    </div>
+  </div>
+
+  <!-- ITINERARY -->
+  <div class="section-title">Day-by-Day in Paris</div>
+  <p class="section-intro">A family-paced Paris — real magic without exhaustion. Key rule: one big thing per morning, then slow afternoons in a park or café.</p>
+
+  <div class="days-list">
+
+    <!-- DAY 1 -->
+    <div class="day-card">
+      <div class="day-dot-col">
+        <div class="day-num arrival"><span class="num">1</span>Arrive</div>
+      </div>
+      <div class="day-body">
+        <div class="day-header">
+          <div class="day-title">Landing at Orly — Hour by Hour</div>
+          <div class="day-date">Day 1 · Arrival day</div>
+        </div>
+
+        <!-- FLIGHT NOTE -->
+        <div class="arrival-note">
+          <strong>✈️ Your flight (Transavia FHT4PK):</strong> Transavia operates TLV→ORY with departures between 13:35 and 18:35 (flight ~5 hours). Depending on your specific time slot, expect to land between <strong>~17:40 and ~22:40 Paris time</strong>. Check your booking in the Transavia app for the exact time. The timetable below is based on a typical early-evening arrival (landing ~19:30) — shift everything by the difference if your flight lands earlier or later. The key principle doesn't change: move efficiently, settle in, and let Paris come to you gently.
+        </div>
+
+        <!-- WHERE TO STAY -->
+        <div class="stay-box">
+          <div class="stay-header">
+            <span class="stay-header-icon">🏨</span>
+            <div class="stay-header-text">
+              <strong>Recommended base for your family</strong>
+              <span>Aparthotel · Marais/Bastille · 3–4 nights</span>
+            </div>
+          </div>
+          <div class="stay-body">
+            <div class="stay-name">Citadines Bastille Marais Paris</div>
+            <div class="stay-address">37 Bd Richard Lenoir, 11th arr. · Metro: Bréguet-Sabin (Line 5), 3 min walk</div>
+            <div class="stay-pros">
+              <div class="stay-pro"><span class="stay-pro-icon">🍳</span>Kitchenette in every room — cook breakfast, avoid the cost of 5 restaurant meals daily</div>
+              <div class="stay-pro"><span class="stay-pro-icon">👨‍👩‍👧‍👦</span>Studios + 1-bedroom apartments — enough space for the family not to feel cramped</div>
+              <div class="stay-pro"><span class="stay-pro-icon">🥖</span>Bastille market Thu & Sun outside the door — fresh food, easy picnic supplies</div>
+              <div class="stay-pro"><span class="stay-pro-icon">🗺️</span>8 min walk to Place des Vosges; 10 min walk to the Marais; 5 min to Franprix</div>
+              <div class="stay-pro"><span class="stay-pro-icon">🚇</span>Metro Line 5 direct to Gare du Nord/Gare de l'Est; easy to Châtelet and everywhere</div>
+              <div class="stay-pro"><span class="stay-pro-icon">💶</span>From ~€160–200/night for a 1-bed apartment. Book via Citadines.com or Booking.com</div>
+            </div>
+            <div class="stay-note">
+              <strong>Alternative:</strong> If Citadines is full, look at <strong>Adagio Aparthotel Paris Haussmann</strong> (9th arr.) or <strong>Residhome Paris Opéra</strong> — same formula, similar price. Avoid standard hotel rooms: you simply can't fit 5 people comfortably. For Airbnb, filter for "4+ guests" with a washing machine in the Marais (4th) or République (11th) — many 2-bedroom apartments sleep 5–6 at competitive prices.
+            </div>
+          </div>
+        </div>
+
+        <!-- TIMELINE -->
+        <div class="timeline">
+
+          <div class="tl-row major">
+            <div class="tl-time">Land</div>
+            <div class="tl-dot"></div>
+            <div class="tl-content">
+              <div class="tl-label">Touch down at Paris Orly, Terminal 1–2–3</div>
+              <div class="tl-detail">Transavia lands at ORY Terminal 3. Stay seated until the 4-year-old is ready — no rush, everyone else is also getting luggage.</div>
+            </div>
+          </div>
+
+          <div class="tl-row">
+            <div class="tl-time">+20m</div>
+            <div class="tl-dot blue"></div>
+            <div class="tl-content">
+              <div class="tl-label">Through passport control + baggage claim</div>
+              <div class="tl-detail">EU/EEA passports use the e-gates (fast). Israeli passports go to the manned booths — allow 15–25 min if busy. Baggage belt typically takes 15–20 min. <em>While waiting: one adult scouts the Metro 14 entrance signs.</em></div>
+            </div>
+          </div>
+
+          <div class="tl-row major">
+            <div class="tl-time">+45m</div>
+            <div class="tl-dot"></div>
+            <div class="tl-content">
+              <div class="tl-label">🚇 Board Metro Line 14 at Aéroport d'Orly station</div>
+              <div class="tl-detail"><em>This is the big upgrade from 2025 — no more OrlyBus.</em> Metro 14 departs from inside Terminal 1–2–3 (follow purple signs). Fully automatic, runs every 90 seconds. Buy tickets at the machine: <strong>€14/adult, €7/child (ages 4–9)</strong>, under 4 free. Buy 5 tickets in one go. Contactless card works directly on the gates — easiest option.</div>
+            </div>
+          </div>
+
+          <div class="tl-row">
+            <div class="tl-time">+70m</div>
+            <div class="tl-dot blue"></div>
+            <div class="tl-content">
+              <div class="tl-label">Arrive Châtelet — transfer to Metro Line 5 direction Bobigny</div>
+              <div class="tl-detail">Change at Châtelet (central Paris). Take <strong>Line 5 (orange)</strong> direction Bobigny and ride 3 stops to <strong>Bréguet-Sabin</strong>. Total underground time: ~35 min from Orly. The 4-year-old will probably fall asleep.</div>
+            </div>
+          </div>
+
+          <div class="tl-row major">
+            <div class="tl-time">+80m</div>
+            <div class="tl-dot green"></div>
+            <div class="tl-content">
+              <div class="tl-label">🏨 Check in — Citadines Bastille Marais</div>
+              <div class="tl-detail">3-min walk from Bréguet-Sabin. Check-in is 24h, so no stress about time. Ask for a higher floor if available — quieter. Drop all bags, splash water on faces, change into clean clothes. <em>You've made it.</em></div>
+            </div>
+          </div>
+
+          <div class="tl-row">
+            <div class="tl-time">+100m</div>
+            <div class="tl-dot blue"></div>
+            <div class="tl-content">
+              <div class="tl-label">🥐 First Paris mission: find a boulangerie</div>
+              <div class="tl-detail">Walk 2 minutes to <strong>Rue Oberkampf</strong> or <strong>Bd Richard Lenoir</strong> — both have multiple boulangeries open until 20:00. Order croissants, pain au chocolat, and a jambon-beurre for each child. This moment is the real arrival in France. If it's after 20:00, the Franprix supermarket on Bd Richard Lenoir is open late.</div>
+            </div>
+          </div>
+
+          <div class="tl-row">
+            <div class="tl-time">Eve</div>
+            <div class="tl-dot blue"></div>
+            <div class="tl-content">
+              <div class="tl-label">🌿 10-minute walk: Place des Vosges for the sunset</div>
+              <div class="tl-detail">If you have energy and it's still light (Paris stays light until 22:00 in summer), walk 8 minutes to Place des Vosges. Kids run on the grass. Adults sit under the arcades. Buy a bottle of wine from the Franprix on the way. This is Paris. No monuments, no queues — just the most beautiful square in the city, nearly empty at dusk.</div>
+            </div>
+          </div>
+
+          <div class="tl-row">
+            <div class="tl-time">21:00</div>
+            <div class="tl-dot green"></div>
+            <div class="tl-content">
+              <div class="tl-label">🛏️ Kids in bed — early night for everyone</div>
+              <div class="tl-detail">It's been a long day. The 4-year-old is running on fumes. Aim for 21:00 latest for the little one. Tomorrow is the Eiffel Tower — you need the early start.</div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="tags">
+          <span class="tag tag-blue">🛬 Metro 14 from Orly</span>
+          <span class="tag tag-gold">🏨 Citadines Bastille</span>
+          <span class="tag tag-sage">🌿 Place des Vosges at dusk</span>
+          <span class="tag tag-grey">No big plans tonight</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- DAY 2 -->
+    <div class="day-card">
+      <div class="day-dot-col">
+        <div class="day-num explore"><span class="num">2</span>Explore</div>
+      </div>
+      <div class="day-body">
+        <div class="day-header">
+          <div class="day-title">Eiffel Tower & Champ de Mars</div>
+          <div class="day-date">Day 2 · Morning focus</div>
+        </div>
+        <div class="day-desc">
+          Do it — but do it early. Arrive at the tower by 9am before the crowds hit. Go up to the second floor (the view is better than the summit for families, and queues are shorter). Then spend the rest of the morning letting the kids run on Champ de Mars. Afternoon: nap or Jardin d'Acclimatation.
+        </div>
+        <div class="activities">
+          <div class="activity">
+            <span class="activity-icon">🗼</span>
+            <span class="activity-text"><strong>Eiffel Tower:</strong> Book tickets in advance at <em>ticket.toureiffel.paris</em> — skip-the-line is essential with kids. 2nd floor: ~€19/adult, ~€9 ages 4–11, under 4 free. Budget 2 hours.</span>
+          </div>
+          <div class="activity">
+            <span class="activity-icon">🌿</span>
+            <span class="activity-text"><strong>Champ de Mars:</strong> Huge lawn, perfect for a picnic lunch and the 4-year-old to run flat-out. Street-food vendors nearby if needed.</span>
+          </div>
+          <div class="activity">
+            <span class="activity-icon">🎡</span>
+            <span class="activity-text"><strong>Jardin d'Acclimatation (optional PM):</strong> Bois de Boulogne amusement park — old-fashioned rides, pony rides, carousel. Kids love it, adults find it charming. ~€5 entry + rides extra.</span>
+          </div>
+        </div>
+        <div class="tags">
+          <span class="tag tag-blue">🗼 Eiffel</span>
+          <span class="tag tag-gold">🧺 Picnic</span>
+          <span class="tag tag-rose">🎡 Kids: 10/10</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- DAY 3 -->
+    <div class="day-card">
+      <div class="day-dot-col">
+        <div class="day-num explore"><span class="num">3</span>Explore</div>
+      </div>
+      <div class="day-body">
+        <div class="day-header">
+          <div class="day-title">Marais, Pompidou & Île Saint-Louis</div>
+          <div class="day-date">Day 3 · The best neighbourhood walk</div>
+        </div>
+        <div class="day-desc">
+          The Marais is the most walkable, photogenic, and family-friendly neighbourhood in Paris. Wide pedestrian streets, Place des Vosges, ice cream at Berthillon, and the Pompidou Centre's colourful exterior that the kids will want to photograph. Notre-Dame is a 10-minute walk away — see it from the outside (reconstruction ongoing).
+        </div>
+        <div class="activities">
+          <div class="activity">
+            <span class="activity-icon">🏛️</span>
+            <span class="activity-text"><strong>Place des Vosges:</strong> Paris's oldest and most beautiful square. Arcades for shade, central garden for the kids. Arrive by 10am for peaceful photos.</span>
+          </div>
+          <div class="activity">
+            <span class="activity-icon">🎨</span>
+            <span class="activity-text"><strong>Centre Pompidou exterior:</strong> The colourful pipes-outside architecture is genuinely mind-bending for children. Free to just see it — the plaza has street performers and space to sit.</span>
+          </div>
+          <div class="activity">
+            <span class="activity-icon">🍦</span>
+            <span class="activity-text"><strong>Île Saint-Louis:</strong> Cross the bridge and get ice cream at Berthillon — legendary, slightly over-hyped, but the ritual is worth it. Walk the quiet streets of the island.</span>
+          </div>
+          <div class="activity">
+            <span class="activity-icon">⛪</span>
+            <span class="activity-text"><strong>Notre-Dame from outside:</strong> Walk by, explain the 2019 fire and the ongoing restoration to the older kids. Powerful context.</span>
+          </div>
+        </div>
+        <div class="tags">
+          <span class="tag tag-blue">🏛️ Marais</span>
+          <span class="tag tag-rose">🍦 Berthillon</span>
+          <span class="tag tag-gold">📸 Very photogenic</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- DAY 4 (OPTIONAL) -->
+    <div class="day-card">
+      <div class="day-dot-col">
+        <div class="day-num explore"><span class="num">4</span>Optional</div>
+      </div>
+      <div class="day-body">
+        <div class="day-header">
+          <div class="day-title">Musée d'Orsay or Day Trip to Versailles</div>
+          <div class="day-date">Day 4 · If you have an extra day</div>
+        </div>
+        <div class="day-desc">
+          Two very different options — pick based on how the kids are feeling. Orsay is 2 hours max with kids; Versailles is a full day but the gardens and fountains are spectacular for all ages. Versailles is especially good on a Fountain Show day (weekends + select days).
+        </div>
+        <div class="activities">
+          <div class="activity">
+            <span class="activity-icon">🖼️</span>
+            <span class="activity-text"><strong>Musée d'Orsay:</strong> The world's best Impressionist collection in a stunning train station. Kids are often captivated by Van Gogh and the giant clocks. Go early, do 2 hours max, leave before they lose interest. Book in advance.</span>
+          </div>
+          <div class="activity">
+            <span class="activity-icon">👑</span>
+            <span class="activity-text"><strong>Versailles alternative:</strong> RER C from Paris (40 min). Palace + gardens. The Hall of Mirrors impresses all ages. On fountain show days (usually Sat/Sun, check dates), the gardens are magical. Budget a full day.</span>
+          </div>
+          <div class="activity">
+            <span class="activity-icon">🧇</span>
+            <span class="activity-text"><strong>Or a slow morning:</strong> Montmartre walk, crêpes at a street stand, view from Sacré-Cœur steps. Very manageable on tired legs — you can take the funicular up.</span>
+          </div>
+        </div>
+        <div class="tags">
+          <span class="tag tag-blue">🖼️ Option A: Orsay</span>
+          <span class="tag tag-gold">👑 Option B: Versailles</span>
+          <span class="tag tag-sage">🧇 Option C: Slow Montmartre</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- DAY 5 -->
+    <div class="day-card">
+      <div class="day-dot-col">
+        <div class="day-num transit"><span class="num">→</span>Train</div>
+      </div>
+      <div class="day-body">
+        <div class="day-header">
+          <div class="day-title">Train to Orléans or Blois — Loire Begins</div>
+          <div class="day-date">Final Paris day</div>
+        </div>
+        <div class="day-desc">
+          Morning croissant, check out, and onto the train. Direct trains run Paris Austerlitz → Orléans in ~1h, or Paris Austerlitz → Blois in ~1h20. Book with SNCF Connect in advance (cheaper + seat reservations). Bikes get picked up from Détours de Loire at your starting point — the adventure begins!
+        </div>
+        <div class="activities">
+          <div class="activity">
+            <span class="activity-icon">🚉</span>
+            <span class="activity-text"><strong>Station:</strong> Paris Austerlitz (Gare d'Austerlitz) for both Orléans and Blois. Take Métro Line 5 or 10 to get there. Allow 30 min from most central hotels.</span>
+          </div>
+          <div class="activity">
+            <span class="activity-icon">🎫</span>
+            <span class="activity-text"><strong>Book on SNCF Connect:</strong> <em>sncf-connect.com</em> — 5 people with pre-booked seats is much calmer than turning up. Under-4s travel free; 4–11 with a child fare. Intercités train, not TGV — no supplement needed.</span>
+          </div>
+          <div class="activity">
+            <span class="activity-icon">🚲</span>
+            <span class="activity-text"><strong>Bike pickup:</strong> Détours de Loire meet you in Orléans or Blois. Call ahead to confirm your cargo bike configuration and arrival time.</span>
+          </div>
+        </div>
+        <div class="tags">
+          <span class="tag tag-sage">🚂 ~1h20 to Blois</span>
+          <span class="tag tag-blue">🎫 Book SNCF advance</span>
+          <span class="tag tag-gold">🚲 Loire starts!</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- TIP BOX -->
+  <div class="tip-box">
+    <strong>💡 Practical Paris Tips for 5</strong>
+    Get a <strong>Navigo Easy card</strong> (€2 chip) and load t+ tickets — each ticket is ~€2.15, kids under 4 ride free on public transport in Paris. A family of 5 will take lots of metro rides, so this adds up fast. Buy at any station ticket machine. For food, eat lunch (not dinner) in proper restaurants — same quality, half the price.
+  </div>
+
+  <!-- TRANSPORT CARD -->
+  <div class="transport-card">
+    <div class="transport-title">🚇 Getting from Orly to Central Paris (2026)</div>
+    <div class="transport-row">
+      <span class="transport-icon">🟣</span>
+      <div class="transport-detail">
+        <strong>Metro Line 14 → Châtelet</strong>
+        <span>Direct from inside Terminal 1–2–3. Every 90 seconds. The best option. ⚠️ OrlyBus was permanently cancelled in March 2025.</span>
+      </div>
+      <div class="transport-time">25 min<br><small style="font-size:11px;color:#888">€14/adult · €7/child 4–9</small></div>
+    </div>
+    <div class="transport-row">
+      <span class="transport-icon">🚆</span>
+      <div class="transport-detail">
+        <strong>Orlyval + RER B → Châtelet</strong>
+        <span>Shuttle to Antony, then RER B north. Same ticket zone as Metro 14. Slightly less convenient but useful if Line 14 is disrupted.</span>
+      </div>
+      <div class="transport-time">35 min<br><small style="font-size:11px;color:#888">~€14/adult</small></div>
+    </div>
+    <div class="transport-row">
+      <span class="transport-icon">🚕</span>
+      <div class="transport-detail">
+        <strong>Taxi (fixed rates)</strong>
+        <span>Right Bank (your hotel area): fixed €45. Left Bank: €36. For 5 people you'll need a minivan — book G7 or Ecab in advance. Only worth it if very late/very tired.</span>
+      </div>
+      <div class="transport-time">30–50 min<br><small style="font-size:11px;color:#888">€45 flat rate</small></div>
+    </div>
+  </div>
+
+  <!-- PARIS HIGHLIGHTS FOR KIDS -->
+  <div class="section-title" style="margin-top:48px">Best for the Kids</div>
+  <p class="section-intro">Paris rewards kids who are given time and space — not packed schedules. These are the genuinely magical spots.</p>
+
+  <div class="highlights-grid">
+    <div class="highlight-card">
+      <span class="highlight-emoji">🗼</span>
+      <div class="highlight-name">Eiffel Tower</div>
+      <div class="highlight-desc">Second floor is the sweet spot — better views than the summit, shorter wait. The structure itself is the spectacle at age 4.</div>
+      <div class="highlight-age">✓ All ages · Book online!</div>
+    </div>
+    <div class="highlight-card">
+      <span class="highlight-emoji">🎡</span>
+      <div class="highlight-name">Jardin d'Acclimatation</div>
+      <div class="highlight-desc">Old-fashioned amusement park in the Bois de Boulogne. Pony rides, carousels, a little train, puppet theatre. Very French, very fun.</div>
+      <div class="highlight-age">✓ Best for ages 3–10</div>
+    </div>
+    <div class="highlight-card">
+      <span class="highlight-emoji">🏰</span>
+      <div class="highlight-name">Place des Vosges</div>
+      <div class="highlight-desc">Paris's oldest square — elegant arcades, a green garden in the middle, and a completely manageable scale for tired legs.</div>
+      <div class="highlight-age">✓ All ages · Great picnic spot</div>
+    </div>
+    <div class="highlight-card">
+      <span class="highlight-emoji">🍦</span>
+      <div class="highlight-name">Berthillon Ice Cream</div>
+      <div class="highlight-desc">On Île Saint-Louis. The queue is part of the experience. Flavours like salted caramel and wild strawberry. Worth every minute of waiting.</div>
+      <div class="highlight-age">✓ All ages · Classic ritual</div>
+    </div>
+    <div class="highlight-card">
+      <span class="highlight-emoji">🌿</span>
+      <div class="highlight-name">Luxembourg Gardens</div>
+      <div class="highlight-desc">The best park in Paris for kids — puppet theatre (Guignol), miniature sailboats on the pond, playgrounds, and wide sandpits. Bring a picnic.</div>
+      <div class="highlight-age">✓ All ages · Free entry</div>
+    </div>
+    <div class="highlight-card">
+      <span class="highlight-emoji">🎨</span>
+      <div class="highlight-name">Pompidou Centre</div>
+      <div class="highlight-desc">The outside is the attraction for kids — all the pipes and ducts painted in primary colours. The plaza has space to sit and watch street performers.</div>
+      <div class="highlight-age">✓ All ages · Free to see exterior</div>
+    </div>
+  </div>
+
+  <!-- WHERE TO STAY -->
+  <div class="tip-box" style="border-color: var(--paris-blue); background: var(--tag-blue); color: var(--paris-blue);">
+    <strong>🏨 Where to Stay with 5 People</strong>
+    Look for <strong>aparthotels</strong> or family suites rather than standard hotel rooms — you can't fit 5 in a double. Citadines Apart'hotel, Residhome, and Adagio are solid chains with apartments. <strong>Best neighbourhoods:</strong> Marais (4th), Saint-Germain (6th/5th), Montparnasse (14th — close to Orly transport). Avoid Champs-Élysées area — overpriced. Île-de-France Airbnbs often give the most space for the price.
+  </div>
+
+  <!-- NEXT STEPS -->
+  <div class="next-banner">
+    <div class="next-text">
+      <strong>After Paris → The Loire begins</strong>
+      Pick up bikes in Blois or Orléans and start pedalling west toward Nantes along the Loire à Vélo — 550 km of châteaux, rivers, and camping.
+    </div>
+    <div class="next-links">
+      <a href="./loire_blois_nantes_22days.html" class="next-link primary">22-Day Loire Itinerary →</a>
+      <a href="./loire_family_cycling_plan.html" class="next-link">35-Day Full Plan →</a>
+      <a href="./index.html" class="next-link">← Home</a>
+    </div>
+  </div>
+
+</main>
+
+<footer class="footer">
+  Family Trip 2026 · Transavia FHT4PK · Israir #262847351 · Paris → Loire à Vélo
+</footer>
+
+</body>
+</html>
