@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Porto — Family Trip 2026 · 21–28 Aug</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --cream: #faf7f2;
+      --warm-white: #fff9f2;
+      --charcoal: #2c2c2c;
+      --soft-grey: #6b6b6b;
+      --porto-terra: #a8472e;
+      --porto-deep: #7a2e1e;
+      --porto-gold: #c9923c;
+      --porto-azul: #2d6a8e;
+      --porto-sage: #6b8e6e;
+      --tag-terra: #fbeae3;
+      --tag-gold: #fdf5e0;
+      --tag-azul: #e6f0f6;
+      --tag-sage: #e8f2e9;
+      --border: #e8e0d4;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--cream);
+      color: var(--charcoal);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      line-height: 1.7;
+    }
+    /* NAV */
+    .nav {
+      background: var(--porto-deep);
+      padding: 14px 32px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .nav a {
+      color: rgba(255,255,255,0.75);
+      text-decoration: none;
+      font-size: 13px;
+      letter-spacing: 0.04em;
+      transition: color 0.2s;
+    }
+    .nav a:hover { color: #fff; }
+    .nav .sep { color: rgba(255,255,255,0.35); }
+    .nav .current { color: var(--porto-gold); font-weight: 500; }
+
+    /* HERO */
+    .hero {
+      position: relative;
+      background: linear-gradient(160deg, #7a2e1e 0%, #a8472e 55%, #c97a4a 100%);
+      color: #fff;
+      padding: 56px 32px 64px;
+      overflow: hidden;
+    }
+    .hero-eyebrow {
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      font-size: 12px;
+      color: rgba(255,255,255,0.8);
+      margin-bottom: 14px;
+    }
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-weight: 700;
+      font-size: clamp(38px, 6vw, 60px);
+      line-height: 1.05;
+      margin-bottom: 16px;
+    }
+    .hero h1 em { font-style: italic; color: #f4d9b0; }
+    .hero-sub {
+      max-width: 620px;
+      font-size: 17px;
+      color: rgba(255,255,255,0.92);
+      margin-bottom: 24px;
+    }
+    .booking-badges { display: flex; flex-wrap: wrap; gap: 10px; }
+    .badge {
+      background: rgba(255,255,255,0.14);
+      border: 1px solid rgba(255,255,255,0.22);
+      border-radius: 999px;
+      padding: 7px 15px;
+      font-size: 13px;
+      color: #fff;
+    }
+    .badge-icon { margin-right: 6px; }
+
+    /* MAIN */
+    .main { max-width: 920px; margin: 0 auto; padding: 0 24px 80px; }
+
+    /* OVERVIEW STRIP */
+    .overview-strip {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+      margin: -32px 0 48px;
+      box-shadow: 0 16px 40px rgba(122,46,30,0.14);
+    }
+    .overview-cell { background: var(--warm-white); padding: 18px 16px; }
+    .overview-label {
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      font-size: 10.5px;
+      color: var(--porto-terra);
+      font-weight: 500;
+      margin-bottom: 6px;
+    }
+    .overview-value {
+      font-family: 'Playfair Display', serif;
+      font-size: 19px;
+      color: var(--charcoal);
+      font-weight: 700;
+    }
+    .overview-sub { font-size: 12px; color: var(--soft-grey); margin-top: 2px; }
+
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 30px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: var(--porto-deep);
+    }
+    .section-intro { color: var(--soft-grey); margin-bottom: 32px; max-width: 640px; }
+
+    /* DAYS */
+    .days-list { display: flex; flex-direction: column; gap: 20px; }
+    .day-card {
+      display: flex;
+      gap: 20px;
+      background: var(--warm-white);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+    }
+    .day-dot-col { flex-shrink: 0; }
+    .day-num {
+      width: 64px;
+      border-radius: 12px;
+      padding: 10px 6px;
+      text-align: center;
+      font-size: 11px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #fff;
+      line-height: 1.3;
+    }
+    .day-num .num { display: block; font-size: 22px; font-family: 'Playfair Display', serif; }
+    .day-num.arrival { background: var(--porto-azul); }
+    .day-num.villa { background: var(--porto-terra); }
+    .day-num.city { background: var(--porto-gold); }
+    .day-num.depart { background: var(--porto-deep); }
+    .day-body { flex: 1; }
+    .day-header { margin-bottom: 12px; }
+    .day-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 21px;
+      font-weight: 700;
+    }
+    .day-date { font-size: 13px; color: var(--porto-terra); font-weight: 500; margin-top: 2px; }
+    .day-desc { color: #3c3c3c; margin-bottom: 14px; }
+
+    /* TIMELINE */
+    .timeline { display: flex; flex-direction: column; gap: 0; margin: 8px 0 6px; }
+    .tl-row { display: grid; grid-template-columns: 64px 18px 1fr; gap: 10px; padding: 8px 0; }
+    .tl-time { font-size: 13px; font-weight: 500; color: var(--porto-terra); text-align: right; }
+    .tl-dot { position: relative; }
+    .tl-dot::before {
+      content: '';
+      position: absolute; left: 5px; top: 5px;
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--porto-terra);
+    }
+    .tl-dot.azul::before { background: var(--porto-azul); }
+    .tl-dot.gold::before { background: var(--porto-gold); }
+    .tl-dot::after {
+      content: '';
+      position: absolute; left: 8px; top: 13px;
+      width: 2px; height: calc(100% + 3px);
+      background: var(--border);
+    }
+    .tl-row:last-child .tl-dot::after { display: none; }
+    .tl-label { font-weight: 500; font-size: 14.5px; }
+    .tl-detail { font-size: 13.5px; color: var(--soft-grey); margin-top: 2px; }
+
+    .activities { display: flex; flex-direction: column; gap: 10px; margin: 6px 0; }
+    .activity { display: flex; gap: 10px; align-items: flex-start; }
+    .activity-icon { flex-shrink: 0; }
+    .activity-text { font-size: 14px; color: #3c3c3c; }
+
+    .tags { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 12px; }
+    .tag {
+      font-size: 12px;
+      padding: 4px 11px;
+      border-radius: 999px;
+      font-weight: 400;
+    }
+    .tag-terra { background: var(--tag-terra); color: var(--porto-deep); }
+    .tag-gold { background: var(--tag-gold); color: #8a6a1c; }
+    .tag-azul { background: var(--tag-azul); color: #1f4a64; }
+    .tag-sage { background: var(--tag-sage); color: #3a5a3c; }
+
+    /* STAY CARD */
+    .stay-card {
+      background: var(--warm-white);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      margin: 8px 0 0;
+    }
+    .stay-head {
+      background: linear-gradient(135deg, #a8472e, #c97a4a);
+      color: #fff;
+      padding: 18px 22px;
+    }
+    .stay-head h3 { font-family: 'Playfair Display', serif; font-size: 22px; }
+    .stay-head .stay-meta { font-size: 13px; color: rgba(255,255,255,0.9); margin-top: 4px; }
+    .stay-body { padding: 20px 22px; }
+    .stay-row { display: flex; gap: 10px; align-items: flex-start; margin-bottom: 12px; font-size: 14px; }
+    .stay-row:last-child { margin-bottom: 0; }
+    .stay-icon { flex-shrink: 0; }
+    .stay-body a { color: var(--porto-terra); }
+
+    .note {
+      background: var(--tag-gold);
+      border-left: 3px solid var(--porto-gold);
+      border-radius: 8px;
+      padding: 14px 18px;
+      margin: 24px 0;
+      font-size: 14px;
+    }
+    .note strong { color: #8a6a1c; }
+    .note.tbd {
+      background: #fdeef0;
+      border-left-color: var(--porto-terra);
+    }
+    .note.tbd strong { color: var(--porto-deep); }
+
+    /* NEXT */
+    .next {
+      margin-top: 40px;
+      background: var(--warm-white);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px;
+      text-align: center;
+    }
+    .next h3 { font-family: 'Playfair Display', serif; font-size: 24px; margin-bottom: 8px; color: var(--porto-deep); }
+    .next p { color: var(--soft-grey); margin-bottom: 18px; }
+    .next-links { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+    .next-link {
+      padding: 11px 20px;
+      border-radius: 999px;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      border: 1px solid var(--porto-terra);
+      color: var(--porto-terra);
+      transition: all 0.2s;
+    }
+    .next-link.primary { background: var(--porto-terra); color: #fff; }
+    .next-link:hover { transform: translateY(-2px); }
+
+    .footer {
+      text-align: center;
+      padding: 32px;
+      font-size: 13px;
+      color: var(--soft-grey);
+      border-top: 1px solid var(--border);
+    }
+
+    @media (max-width: 600px) {
+      .day-card { flex-direction: column; gap: 12px; }
+      .tl-row { grid-template-columns: 54px 16px 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="./index.html">🚲 Family Trip 2026</a>
+  <span class="sep">›</span>
+  <span class="current">🇵🇹 Porto</span>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-eyebrow">Leg 3 · Family Week · 21–28 August 2026</div>
+  <h1>Porto &amp; <em>the Silver Coast</em></h1>
+  <p class="hero-sub">
+    After 18 days on the bike, a week by the sea. Fly Nantes → Porto on 21 Aug, then a villa with a pool near Esmoriz beach for the whole family — before the journey home via Milan.
+  </p>
+  <div class="booking-badges">
+    <div class="badge"><span class="badge-icon">✈️</span>Nantes → Porto · Fri 21 Aug</div>
+    <div class="badge"><span class="badge-icon">🏡</span>BeSunny Villa · Esmoriz</div>
+    <div class="badge"><span class="badge-icon">🏖️</span>5 min from the beach</div>
+    <div class="badge"><span class="badge-icon">👨‍👩‍👧‍👦</span>Family of 5 + relatives</div>
+  </div>
+</header>
+
+<main class="main">
+
+  <!-- OVERVIEW STRIP -->
+  <div class="overview-strip">
+    <div class="overview-cell">
+      <div class="overview-label">Arrive</div>
+      <div class="overview-value">Porto (OPO)</div>
+      <div class="overview-sub">Fri 21 Aug · from Nantes</div>
+    </div>
+    <div class="overview-cell">
+      <div class="overview-label">Villa Stay</div>
+      <div class="overview-value">6 nights</div>
+      <div class="overview-sub">21–27 Aug · Esmoriz</div>
+    </div>
+    <div class="overview-cell">
+      <div class="overview-label">Last Night</div>
+      <div class="overview-value">27–28 Aug</div>
+      <div class="overview-sub">Near OPO · TBD</div>
+    </div>
+    <div class="overview-cell">
+      <div class="overview-label">Onward</div>
+      <div class="overview-value">→ Milan</div>
+      <div class="overview-sub">Fri 28 Aug · FR4017</div>
+    </div>
+  </div>
+
+  <!-- ARRIVAL NOTE -->
+  <div class="note">
+    <strong>✈️ Your Nantes → Porto flight (21 Aug):</strong> You've booked this — once you share the flight number and departure/arrival times, this page will show the exact schedule. The villa check-in is after 15:00, so any flight that lands by mid-afternoon lets you reach Esmoriz in good time.
+  </div>
+
+  <!-- ITINERARY -->
+  <div class="section-title">The Porto Week</div>
+  <p class="section-intro">A slow, restorative week after the ride: beach mornings at the villa, a couple of Porto city days, and easy family time. Esmoriz sits on the coast about 35 km south of Porto.</p>
+
+  <div class="days-list">
+
+    <!-- DAY: ARRIVAL -->
+    <div class="day-card">
+      <div class="day-dot-col">
+        <div class="day-num arrival"><span class="num">21</span>Aug</div>
+      </div>
+      <div class="day-body">
+        <div class="day-header">
+          <div class="day-title">Fly Nantes → Porto, transfer to the villa</div>
+          <div class="day-date">Fri 21 Aug · Arrival day</div>
+        </div>
+        <div class="timeline">
+          <div class="tl-row">
+            <div class="tl-time">AM</div>
+            <div class="tl-dot azul"></div>
+            <div class="tl-content">
+              <div class="tl-label">Check out of Nantes, head to NTE airport</div>
+              <div class="tl-detail">Nantes Atlantique is ~15 min by tram + shuttle or taxi from the city centre. Allow 2 hours before the flight for a family of 5 with bags.</div>
+            </div>
+          </div>
+          <div class="tl-row">
+            <div class="tl-time">✈️</div>
+            <div class="tl-dot"></div>
+            <div class="tl-content">
+              <div class="tl-label">Direct flight Nantes (NTE) → Porto (OPO)</div>
+              <div class="tl-detail">~1h50 in the air. <em>Exact departure/arrival times to be filled in from your booking.</em> Porto is on the same time zone as the UK (1h behind France) — you gain an hour.</div>
+            </div>
+          </div>
+          <div class="tl-row">
+            <div class="tl-time">+1h</div>
+            <div class="tl-dot gold"></div>
+            <div class="tl-content">
+              <div class="tl-label">🚗 Pick up rental car / transfer at OPO</div>
+              <div class="tl-detail">A car is the easiest way to reach Esmoriz and to get around for the week (beaches, Porto, supermarkets). Rental desks are at the airport. A large family will likely need a 7-seater — book ahead.</div>
+            </div>
+          </div>
+          <div class="tl-row">
+            <div class="tl-time">~40m</div>
+            <div class="tl-dot"></div>
+            <div class="tl-content">
+              <div class="tl-label">🏡 Drive to BeSunny villa, Esmoriz</div>
+              <div class="tl-detail">~35 km / 35–40 min south on the A29. Check-in after 15:00. Settle in, let the kids find the pool, and pick up groceries at a local supermarket (Continente / Pingo Doce nearby).</div>
+            </div>
+          </div>
+        </div>
+        <div class="tags">
+          <span class="tag tag-azul">✈️ NTE → OPO</span>
+          <span class="tag tag-gold">🚗 Rental car</span>
+          <span class="tag tag-terra">🏡 Check-in 15:00</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- DAY: SETTLE / BEACH -->
+    <div class="day-card">
+      <div class="day-dot-col">
+        <div class="day-num villa"><span class="num">22</span>Aug</div>
+      </div>
+      <div class="day-body">
+        <div class="day-header">
+          <div class="day-title">Beach &amp; pool — do nothing on purpose</div>
+          <div class="day-date">Sat 22 Aug · Recovery day</div>
+        </div>
+        <div class="day-desc">
+          After three weeks of moving, the best plan is no plan. Esmoriz beach is a 5-minute hop. The kids alternate pool and sea; the adults read. A relaxed family BBQ at the villa in the evening.
+        </div>
+        <div class="activities">
+          <div class="activity"><span class="activity-icon">🏖️</span><span class="activity-text"><strong>Praia de Esmoriz:</strong> Wide Atlantic beach with a lagoon area calmer for little ones. Lifeguarded in August. Bring the Atlantic-cold-water expectations — it's bracing.</span></div>
+          <div class="activity"><span class="activity-icon">🏊</span><span class="activity-text"><strong>Villa pool:</strong> The 4-year-old's headquarters for the week. The pink-façade villa was made for this.</span></div>
+          <div class="activity"><span class="activity-icon">🍖</span><span class="activity-text"><strong>BBQ night:</strong> The villa has a grill and garden — easy first dinner with the wider family.</span></div>
+        </div>
+        <div class="tags">
+          <span class="tag tag-terra">🏖️ Esmoriz beach</span>
+          <span class="tag tag-sage">🌿 Rest</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- DAY: PORTO CITY -->
+    <div class="day-card">
+      <div class="day-dot-col">
+        <div class="day-num city"><span class="num">~</span>City</div>
+      </div>
+      <div class="day-body">
+        <div class="day-header">
+          <div class="day-title">A day in Porto</div>
+          <div class="day-date">Pick a cooler day · 23–26 Aug</div>
+        </div>
+        <div class="day-desc">
+          One full day in the city itself — drive in (~35 min) or take the train from Esmoriz/Espinho. Porto is steep and walkable, with the Douro river at its heart. Easy to do the highlights at a family pace and be back at the villa by evening.
+        </div>
+        <div class="activities">
+          <div class="activity"><span class="activity-icon">🌉</span><span class="activity-text"><strong>Ribeira &amp; Dom Luís I Bridge:</strong> The colourful riverfront and the double-deck iron bridge — walk the lower deck with kids. Big views, gentle pace.</span></div>
+          <div class="activity"><span class="activity-icon">📚</span><span class="activity-text"><strong>Livraria Lello:</strong> The famous ornate bookshop (Harry-Potter-ish staircase). Timed tickets, gets very busy — book ahead or skip if the queues defeat you.</span></div>
+          <div class="activity"><span class="activity-icon">🚋</span><span class="activity-text"><strong>Tram 1 along the Douro:</strong> Vintage tram from the centre to Foz (the river mouth). Kids love it; ends near beaches and ice cream.</span></div>
+          <div class="activity"><span class="activity-icon">🚂</span><span class="activity-text"><strong>São Bento Station:</strong> Walls covered in blue azulejo tiles — a 10-minute wow on the way past.</span></div>
+        </div>
+        <div class="tags">
+          <span class="tag tag-azul">🌉 Ribeira</span>
+          <span class="tag tag-gold">📚 Lello</span>
+          <span class="tag tag-terra">🚋 Tram to Foz</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- DAY: FLEX / FAMILY -->
+    <div class="day-card">
+      <div class="day-dot-col">
+        <div class="day-num villa"><span class="num">~</span>Flex</div>
+      </div>
+      <div class="day-body">
+        <div class="day-header">
+          <div class="day-title">Family time &amp; coast — flexible days</div>
+          <div class="day-date">23–26 Aug · Whatever you feel like</div>
+        </div>
+        <div class="day-desc">
+          The rest of the week flexes around the family gathering and the weather. Some ideas within easy reach of Esmoriz:
+        </div>
+        <div class="activities">
+          <div class="activity"><span class="activity-icon">🏖️</span><span class="activity-text"><strong>Espinho:</strong> Lively beach town 10 min north — Saturday market, restaurants, more beaches.</span></div>
+          <div class="activity"><span class="activity-icon">🛶</span><span class="activity-text"><strong>Barrinha de Esmoriz lagoon:</strong> Birdlife and calm water on the doorstep — gentle nature walk.</span></div>
+          <div class="activity"><span class="activity-icon">🍷</span><span class="activity-text"><strong>Vila Nova de Gaia:</strong> Across the river from Porto — port wine cellars (kids can come; tastings for adults) and the cable car.</span></div>
+          <div class="activity"><span class="activity-icon">🏰</span><span class="activity-text"><strong>Aveiro:</strong> ~30 min south — the "Portuguese Venice" with painted moliceiro boats on the canals. Good half-day.</span></div>
+        </div>
+        <div class="tags">
+          <span class="tag tag-sage">👨‍👩‍👧‍👦 Family gathering</span>
+          <span class="tag tag-terra">🏖️ Coast</span>
+          <span class="tag tag-azul">🛶 Aveiro</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- DAY: CHECKOUT + LAST NIGHT -->
+    <div class="day-card">
+      <div class="day-dot-col">
+        <div class="day-num depart"><span class="num">27</span>Aug</div>
+      </div>
+      <div class="day-body">
+        <div class="day-header">
+          <div class="day-title">Villa check-out → last night near the airport</div>
+          <div class="day-date">Thu 27 Aug · Move day</div>
+        </div>
+        <div class="day-desc">
+          Check out of BeSunny before 11:00. Spend the day around Porto or the coast, then move to your last-night base — ideally closer to OPO (Porto north side / Maia / Vila do Conde) to make the morning Milan flight easy.
+        </div>
+        <div class="note tbd">
+          <strong>🏨 Night of 27 Aug — still to book.</strong> One night between villa check-out (27th) and the Milan flight (28th). Pick somewhere near Porto airport to keep the departure simple. Want me to find family options near OPO?
+        </div>
+        <div class="tags">
+          <span class="tag tag-terra">🏡 Check-out 11:00</span>
+          <span class="tag tag-gold">🏨 1 night near OPO</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- DAY: DEPART -->
+    <div class="day-card">
+      <div class="day-dot-col">
+        <div class="day-num depart"><span class="num">28</span>Aug</div>
+      </div>
+      <div class="day-body">
+        <div class="day-header">
+          <div class="day-title">Fly Porto → Milan Malpensa</div>
+          <div class="day-date">Fri 28 Aug · Onward to Italy</div>
+        </div>
+        <div class="timeline">
+          <div class="tl-row">
+            <div class="tl-time">AM</div>
+            <div class="tl-dot gold"></div>
+            <div class="tl-content">
+              <div class="tl-label">Return rental car at OPO, check in</div>
+              <div class="tl-detail">Drop the car at the airport. Ryanair check-in / bag drop — allow plenty of time, OPO gets busy in August.</div>
+            </div>
+          </div>
+          <div class="tl-row">
+            <div class="tl-time">14:50</div>
+            <div class="tl-dot"></div>
+            <div class="tl-content">
+              <div class="tl-label">✈️ Ryanair FR4017 departs Porto (OPO)</div>
+              <div class="tl-detail">Porto 14:50 → Milan Malpensa 18:15. ~2h25 flight. Porto is 1h behind Milan, so the clock jumps forward.</div>
+            </div>
+          </div>
+          <div class="tl-row">
+            <div class="tl-time">18:15</div>
+            <div class="tl-dot azul"></div>
+            <div class="tl-content">
+              <div class="tl-label">🇮🇹 Land Milan Malpensa (MXP), Terminal 1</div>
+              <div class="tl-detail">On to the Milan leg — 3 nights before the final flight home (Wizz Air W4 6403, MXP → TLV, 31 Aug 13:05 → 18:00).</div>
+            </div>
+          </div>
+        </div>
+        <div class="tags">
+          <span class="tag tag-terra">✈️ Ryanair FR4017</span>
+          <span class="tag tag-azul">🇮🇹 → Milan</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- STAY CARD -->
+  <h2 class="section-title" style="margin-top:48px">Where you're staying</h2>
+  <div class="stay-card">
+    <div class="stay-head">
+      <h3>🏡 BeSunny — Villa with pool</h3>
+      <div class="stay-meta">Esmoriz, Aveiro · ★5.0 (13 reviews) · Superhost Francisca · 21–27 Aug (6 nights)</div>
+    </div>
+    <div class="stay-body">
+      <div class="stay-row"><span class="stay-icon">🛏️</span><span>8 bedrooms · 15 beds · 8.5 bathrooms · sleeps 16+ — room for the whole extended family.</span></div>
+      <div class="stay-row"><span class="stay-icon">🏊</span><span>Private pool, BBQ area, garden, indoor &amp; outdoor fireplaces, yoga studio. Distinctive pink façade.</span></div>
+      <div class="stay-row"><span class="stay-icon">🏖️</span><span>5 minutes from Esmoriz beach; quiet residential area, ~35 km south of Porto.</span></div>
+      <div class="stay-row"><span class="stay-icon">🕒</span><span>Check-in after <strong>15:00</strong> · check-out before <strong>11:00</strong> · licence 193427/AL.</span></div>
+      <div class="stay-row"><span class="stay-icon">🔗</span><span><a href="https://he.airbnb.com/rooms/1350658490219463044">View the listing on Airbnb →</a></span></div>
+    </div>
+  </div>
+
+  <!-- NEXT -->
+  <div class="next">
+    <h3>The home stretch</h3>
+    <p>From Milan it's three days, then the flight home to Tel Aviv on 31 August.</p>
+    <div class="next-links">
+      <a href="./index.html" class="next-link primary">← Full Trip Overview</a>
+      <a href="./loire_blois_nantes_22days.html" class="next-link">🚲 Loire Cycling Plan</a>
+    </div>
+  </div>
+
+</main>
+
+<div class="footer">
+  Family Trip 2026 · Porto leg 21–28 Aug · Nantes → Porto → Milan → Tel Aviv<br>
+  BeSunny Villa, Esmoriz · Ryanair FR4017 · Wizz Air W4 6403 (MPD4ND)
+</div>
+
+</body>
+</html>

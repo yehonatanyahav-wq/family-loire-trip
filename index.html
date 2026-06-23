@@ -151,8 +151,9 @@
 
   .journey-stop {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    gap: 10px;
+    gap: 2px;
     font-size: 13px;
     font-weight: 700;
     color: var(--text-mid);
@@ -162,6 +163,14 @@
 
   .journey-stop .stop-icon { font-size: 18px; }
   .journey-stop .stop-city { color: var(--text-dark); }
+  .journey-stop .stop-date {
+    font-size: 10px;
+    font-weight: 500;
+    color: var(--text-mid);
+    text-transform: none;
+    letter-spacing: 0.02em;
+    opacity: 0.85;
+  }
 
   .journey-arrow {
     margin: 0 16px;
@@ -246,6 +255,10 @@
   .card-header.loire-long {
     background: linear-gradient(160deg, #1a4020 0%, #2d6a28 55%, #4a8c3f 100%);
   }
+  .card-header.porto {
+    background: linear-gradient(160deg, #7a2e1e 0%, #a8472e 55%, #c97a4a 100%);
+  }
+  .card-header.porto ~ .card-body .stat-value { color: #a8472e; }
 
   .card-leg {
     font-size: 10px;
@@ -443,13 +456,13 @@
     <div class="hero-eyebrow">Summer 2026 · Family of 5</div>
     <h1>Paris &amp; <em>Loire à Vélo</em></h1>
     <p class="hero-sub">
-      Two weeks of magic — a few days in the city of light, then 550 km of châteaux, rivers, and cycling all the way to Nantes.
+      28 July – 31 August. A night in Cyprus, two days in Paris, ~380 km of châteaux and cycling to Nantes, a week with family in Porto, then home via Milan.
     </p>
     <div class="hero-meta">
-      <span class="hero-chip">✈️ Transavia FHT4PK · Tel Aviv → Paris Orly</span>
-      <span class="hero-chip">👨‍👩‍👧‍👦 Ages 4, 8 & 11</span>
+      <span class="hero-chip">✈️ TLV → Larnaca → Paris Orly</span>
+      <span class="hero-chip">👨‍👩‍👧‍👦 Family of 5 · ages 4, 8, 11</span>
       <span class="hero-chip">🚲 Loire à Vélo</span>
-      <span class="hero-chip">✈️ Israir #262847351 · Return</span>
+      <span class="hero-chip">✈️ Home via Porto → Milan → TLV</span>
     </div>
   </div>
   <div class="hero-river">
@@ -478,36 +491,61 @@
     <div class="journey-stop">
       <span class="stop-icon">🇮🇱</span>
       <span class="stop-city">Tel Aviv</span>
+      <span class="stop-date">28 Jul</span>
+    </div>
+    <div class="journey-arrow">→</div>
+    <div class="journey-stop">
+      <span class="stop-icon">🇨🇾</span>
+      <span class="stop-city">Larnaca</span>
+      <span class="stop-date">28–29 Jul</span>
     </div>
     <div class="journey-arrow">→</div>
     <div class="journey-stop">
       <span class="stop-icon">🗼</span>
       <span class="stop-city">Paris</span>
+      <span class="stop-date">29–31 Jul</span>
     </div>
     <div class="journey-arrow">→</div>
     <div class="journey-stop">
       <span class="stop-icon">🚲</span>
-      <span class="stop-city">Orléans / Blois</span>
+      <span class="stop-city">Blois</span>
+      <span class="stop-date">31 Jul</span>
     </div>
     <div class="journey-arrow">→</div>
     <div class="journey-stop">
       <span class="stop-icon">🏰</span>
       <span class="stop-city">Amboise · Tours</span>
+      <span class="stop-date">early Aug</span>
     </div>
     <div class="journey-arrow">→</div>
     <div class="journey-stop">
       <span class="stop-icon">🌊</span>
       <span class="stop-city">Saumur · Angers</span>
+      <span class="stop-date">mid Aug</span>
     </div>
     <div class="journey-arrow">→</div>
     <div class="journey-stop">
       <span class="stop-icon">🐘</span>
       <span class="stop-city">Nantes</span>
+      <span class="stop-date">19–21 Aug</span>
+    </div>
+    <div class="journey-arrow">→</div>
+    <div class="journey-stop">
+      <span class="stop-icon">🇵🇹</span>
+      <span class="stop-city">Porto</span>
+      <span class="stop-date">21–28 Aug</span>
+    </div>
+    <div class="journey-arrow">→</div>
+    <div class="journey-stop">
+      <span class="stop-icon">🇮🇹</span>
+      <span class="stop-city">Milan</span>
+      <span class="stop-date">28–31 Aug</span>
     </div>
     <div class="journey-arrow">→</div>
     <div class="journey-stop">
       <span class="stop-icon">🇮🇱</span>
       <span class="stop-city">Home</span>
+      <span class="stop-date">31 Aug</span>
     </div>
   </div>
 </div>
@@ -517,7 +555,7 @@
 
   <div class="section-label">The full journey</div>
   <h2 class="section-heading">Three adventures, one summer</h2>
-  <p class="section-intro">Start in Paris to ease into France, then pick up bikes and pedal west along the Loire — ending with giant mechanical elephants in Nantes. Click any card to open the full plan.</p>
+  <p class="section-intro">Two days in Paris to ease into France, then pick up bikes in Blois and pedal west along the Loire to Nantes — ending with a family gathering in Porto. Click any card to open the full plan.</p>
 
   <!-- CARDS -->
   <div class="cards-grid">
@@ -526,22 +564,22 @@
     <a class="trip-card" href="./paris_itinerary.html">
       <div class="card-header paris">
         <span class="card-emoji">🗼</span>
-        <div class="card-leg">Leg 1 · Arrival</div>
+        <div class="card-leg">Leg 1 · Arrival · 29–31 Jul</div>
         <div class="card-title">Paris</div>
         <div class="card-subtitle">Eiffel, Marais & city magic</div>
       </div>
       <div class="card-body">
         <div class="card-stats">
           <div class="stat">
-            <div class="stat-value">3–4</div>
+            <div class="stat-value">2</div>
             <div class="stat-label">Nights</div>
           </div>
           <div class="stat">
             <div class="stat-value">Orly</div>
-            <div class="stat-label">Transavia FHT4PK</div>
+            <div class="stat-label">Transavia TO3691</div>
           </div>
         </div>
-        <p class="card-desc">Gentle Paris for a family of 5 — one big thing each morning, slow afternoons in gardens. Eiffel Tower, Marais, Berthillon ice cream, and the train west to Loire.</p>
+        <p class="card-desc">Arrive 29 Jul, one full day in the city on 30 Jul, then the train west on 31 Jul. Gentle Paris for a family of 5 — Eiffel Tower, Marais, Berthillon ice cream.</p>
         <div class="card-tags">
           <span class="ctag ctag-blue">🗼 Eiffel Tower</span>
           <span class="ctag ctag-gold">🍦 Berthillon</span>
@@ -555,14 +593,14 @@
     <a class="trip-card" href="./loire_blois_nantes_22days.html">
       <div class="card-header loire-short">
         <span class="card-emoji">🚲</span>
-        <div class="card-leg">Leg 2 · Cycling · Compact</div>
+        <div class="card-leg">Leg 2 · Cycling · 1–20 Aug</div>
         <div class="card-title">Loire à Vélo</div>
-        <div class="card-subtitle">22 days · Blois → Nantes</div>
+        <div class="card-subtitle">20 days · Blois → Nantes</div>
       </div>
       <div class="card-body">
         <div class="card-stats">
           <div class="stat">
-            <div class="stat-value">22</div>
+            <div class="stat-value">20</div>
             <div class="stat-label">Days</div>
           </div>
           <div class="stat">
@@ -578,11 +616,11 @@
             <div class="stat-label">km/day avg</div>
           </div>
         </div>
-        <p class="card-desc">Starts in Blois (1h20 train from Paris). All the best châteaux and campsite spots, trimmed to the highlights. Smart choice if you want Paris time too.</p>
+        <p class="card-desc">Cycle starts in Blois on 1 Aug (arrived by train 31 Jul). All the best châteaux and campsite spots, reaching Nantes around 20 Aug. The active plan.</p>
         <div class="card-tags">
           <span class="ctag ctag-green">🏕️ Camping</span>
           <span class="ctag ctag-gold">🏰 Châteaux</span>
-          <span class="ctag ctag-grey">⭐ Recommended</span>
+          <span class="ctag ctag-grey">⭐ Active route</span>
         </div>
         <div class="card-cta cta-green">Open 22-Day Plan →</div>
       </div>
@@ -592,7 +630,7 @@
     <a class="trip-card" href="./loire_family_cycling_plan.html">
       <div class="card-header loire-long">
         <span class="card-emoji">🌿</span>
-        <div class="card-leg">Leg 2 · Cycling · Full</div>
+        <div class="card-leg">Leg 2 · Cycling · Alt (too long for 2026)</div>
         <div class="card-title">Loire à Vélo</div>
         <div class="card-subtitle">35 days · Orléans → Nantes</div>
       </div>
@@ -625,6 +663,35 @@
       </div>
     </a>
 
+    <!-- PORTO -->
+    <a class="trip-card" href="./porto_itinerary.html">
+      <div class="card-header porto">
+        <span class="card-emoji">🇵🇹</span>
+        <div class="card-leg">Leg 3 · Family · 21–28 Aug</div>
+        <div class="card-title">Porto</div>
+        <div class="card-subtitle">Villa &amp; beach week after the ride</div>
+      </div>
+      <div class="card-body">
+        <div class="card-stats">
+          <div class="stat">
+            <div class="stat-value">21 Aug</div>
+            <div class="stat-label">Fly Nantes → Porto</div>
+          </div>
+          <div class="stat">
+            <div class="stat-value">6</div>
+            <div class="stat-label">Villa nights</div>
+          </div>
+        </div>
+        <p class="card-desc">Fly Nantes → Porto on Fri 21 Aug, then the BeSunny villa (pool, 5 min from Esmoriz beach) for the family, 21–27 Aug. Last night near OPO, then onward to Milan on 28 Aug.</p>
+        <div class="card-tags">
+          <span class="ctag ctag-grey">✈️ NTE → OPO</span>
+          <span class="ctag ctag-gold">🏡 BeSunny villa</span>
+          <span class="ctag ctag-grey">🏖️ Esmoriz beach</span>
+        </div>
+        <div class="card-cta" style="background:#fbeae3;color:#a8472e;">Open Porto Plan →</div>
+      </div>
+    </a>
+
   </div>
 
   <!-- BOOKING ALERT -->
@@ -653,7 +720,23 @@
       </div>
       <div class="booking-item">
         <span>🚆</span>
-        <div><strong>Train Paris → Blois/Orléans</strong><br>Book in advance on SNCF Connect.<br><a href="https://www.sncf-connect.com">sncf-connect.com</a></div>
+        <div><strong>Train Paris Austerlitz → Blois</strong><br>31 Jul midday — direct TER ~1h35, family of 5. Book on SNCF Connect.<br><a href="https://www.sncf-connect.com">sncf-connect.com</a></div>
+      </div>
+      <div class="booking-item">
+        <span>✅</span>
+        <div><strong>Nantes → Porto flight — BOOKED</strong><br>Fri 21 Aug, direct NTE→OPO (~1h50). Add the flight number and times to the Porto page once handy.</div>
+      </div>
+      <div class="booking-item">
+        <span>✅</span>
+        <div><strong>BeSunny villa, Esmoriz — BOOKED</strong><br>21–27 Aug (6 nights). Pool, 8 bedrooms, 5 min from beach. Check-in 15:00 / out 11:00.<br><a href="https://he.airbnb.com/rooms/1350658490219463044">Airbnb listing</a></div>
+      </div>
+      <div class="booking-item">
+        <span>🏨</span>
+        <div><strong>Last night near OPO — TO BOOK</strong><br>27→28 Aug, between villa check-out and the Milan flight. Pick somewhere near Porto airport.<br><a href="https://www.booking.com">booking.com</a></div>
+      </div>
+      <div class="booking-item">
+        <span>🚗</span>
+        <div><strong>Porto rental car — TO BOOK</strong><br>7-seater from OPO for the week (beaches, Porto, Aveiro). Book early for August.<br><a href="https://www.skyscanner.net/carhire">skyscanner.net/carhire</a></div>
       </div>
     </div>
   </div>
@@ -664,7 +747,7 @@
   <div class="practical-grid">
     <div class="practical-card">
       <h4>✈️ Flights</h4>
-      <p>Transavia FHT4PK outbound (Tel Aviv → Paris Orly). Israir #262847351 return. Check Transavia app for any updates to your booking.</p>
+      <p>Outbound: Israir 6H581 (TLV→Larnaca, 28 Jul) + Transavia TO3691 (Larnaca→Paris Orly, 29 Jul, ref FHT4PK). Nantes→Porto: Transavia, 21 Aug. Return: Ryanair FR4017 (Porto→Milan, 28 Aug) + Wizz Air W4 6403 (Milan→TLV, 31 Aug, ref MPD4ND).</p>
     </div>
     <div class="practical-card">
       <h4>🗺️ Loire à Vélo Route</h4>
@@ -693,8 +776,8 @@
 <!-- FOOTER -->
 <div class="footer">
   <strong>Family Trip 2026 · Paris & Loire à Vélo</strong>
-  Family of 5 · Ages 4, 8 & 11 · Tel Aviv → Paris Orly → Loire Valley → Nantes<br>
-  Transavia FHT4PK · Israir #262847351 · <a href="https://www.loirebybike.co.uk">loirebybike.co.uk</a> · <a href="https://www.detoursdeloire.com/en/">detoursdeloire.com</a>
+  Family of 5 · Ages 4, 8 & 11 · Tel Aviv → Larnaca → Paris → Loire → Nantes → Porto → Milan → Home · 28 Jul–31 Aug 2026<br>
+  Israir 6H581 · Transavia TO3691 (FHT4PK) · Ryanair FR4017 · Wizz Air W4 6403 (MPD4ND) · <a href="https://www.loirebybike.co.uk">loirebybike.co.uk</a> · <a href="https://www.detoursdeloire.com/en/">detoursdeloire.com</a>
 </div>
 
 </body>
